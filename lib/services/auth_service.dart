@@ -34,16 +34,18 @@ class AuthService {
 
       if (firebaseUser != null) {
         final prefs = await SharedPreferences.getInstance();
-
-        // 🔥 Obtener ID real desde MySQL
+        final emailCodificado = Uri.encodeComponent(firebaseUser.email ?? '');
         String apiUrl =
-            "https://farma.staweno.com/get_user_id.php?email=${firebaseUser.email}";
+            "https://farma.staweno.com/get_user.php?email=$emailCodificado";
         var response = await http.get(Uri.parse(apiUrl));
 
         int userId = 0; // ID por defecto
         if (response.statusCode == 200) {
-          var jsonResponse = jsonDecode(response.body);
-          userId = jsonResponse["user_id"];
+          final jsonResponse = jsonDecode(response.body);
+          if (jsonResponse is Map<String, dynamic>) {
+            final rawId = jsonResponse["id"] ?? jsonResponse["user_id"];
+            userId = int.tryParse(rawId?.toString() ?? '') ?? 0;
+          }
         }
 
         // 🔥 Crear usuario con datos de Google
@@ -74,6 +76,7 @@ class AuthService {
         await prefs.setString(
           'user',
           json.encode({
+            "id": user.id,
             "name": user.name,
             "email": user.email,
             "photo": user.photo,

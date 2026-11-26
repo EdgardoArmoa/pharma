@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pharma/model/card_model.dart';
-import 'package:pharma/model/colors.dart';
 import 'package:pharma/model/product_model.dart';
 import 'package:pharma/provider/auth_provider.dart';
 import 'package:pharma/provider/cart_provider.dart';
@@ -56,10 +55,10 @@ class _LastProductCardState extends State<LastProductCard> {
                     children: <Widget>[
                       Container(
                         width: 150, // Ancho fijo para cada tarjeta
-                        height: 190,
+                        height: 210,
                         margin: const EdgeInsets.fromLTRB(4, 4, 14, 0),
                         decoration: BoxDecoration(
-                          color: AppColors.white,
+                          color: const Color.fromARGB(255, 250, 250, 250),
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(0),
                             topRight: Radius.circular(20),
@@ -128,7 +127,7 @@ class _LastProductCardState extends State<LastProductCard> {
                                       top: 8,
                                       left: 0,
                                       child: SizedBox(
-                                        width: 60,
+                                        width: 40,
                                         child: Image.asset('assets/cupon.png'),
                                       ),
                                     ),
@@ -144,7 +143,7 @@ class _LastProductCardState extends State<LastProductCard> {
                                   // PRECIOS
                                   if (product.onSale == 1)
                                     Positioned(
-                                      bottom: 30,
+                                      bottom: 50,
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(
                                           16,
@@ -166,7 +165,7 @@ class _LastProductCardState extends State<LastProductCard> {
 
                                   // Mostrar precio final (ya sea de oferta o regular)
                                   Positioned(
-                                    bottom: 8,
+                                    bottom: 30,
                                     child: Padding(
                                       padding: const EdgeInsets.fromLTRB(
                                         16,
@@ -188,7 +187,7 @@ class _LastProductCardState extends State<LastProductCard> {
                                     ),
                                   ),
                                   Positioned(
-                                    bottom: 0,
+                                    bottom: 28,
                                     right: 0,
                                     child: IconButton(
                                       padding: EdgeInsets.zero,
@@ -243,24 +242,29 @@ class _LastProductCardState extends State<LastProductCard> {
                                       },
                                     ),
                                   ),
+                                  Positioned(
+                                    bottom: 10,
+                                    right: 0,
+                                    child: SizedBox(
+                                      width: 138,
+                                      child: Text(
+                                        product.name.toUpperCase() +
+                                            product.name
+                                                .substring(1)
+                                                .toLowerCase(),
+                                        style: GoogleFonts.quicksand(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 13,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
                           ],
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      SizedBox(
-                        width: 138,
-                        child: Text(
-                          product.name.toUpperCase() +
-                              product.name.substring(1).toLowerCase(),
-                          style: GoogleFonts.quicksand(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                     ],

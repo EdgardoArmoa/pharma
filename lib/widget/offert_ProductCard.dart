@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pharma/model/card_model.dart';
-import 'package:pharma/model/colors.dart';
 import 'package:pharma/model/product_model.dart';
 import 'package:pharma/provider/auth_provider.dart';
 import 'package:pharma/provider/cart_provider.dart';
@@ -54,10 +53,10 @@ class _OffertProductCardState extends State<OffertProductCard> {
                     children: <Widget>[
                       Container(
                         width: 150, // Ancho fijo para cada tarjeta
-                        height: 190,
+                        height: 210,
                         margin: const EdgeInsets.fromLTRB(4, 4, 14, 0),
                         decoration: BoxDecoration(
-                          color: AppColors.white,
+                          color: const Color.fromARGB(255, 250, 248, 233),
                           borderRadius: const BorderRadius.only(
                             topLeft: Radius.circular(0),
                             topRight: Radius.circular(20),
@@ -158,10 +157,10 @@ class _OffertProductCardState extends State<OffertProductCard> {
                                       product: product,
                                     ),
                                   ),
-                                  // PRECIOS
+                                  // PRECIOS REBAJADO
                                   if (product.onSale == 1)
                                     Positioned(
-                                      bottom: 30,
+                                      bottom: 50,
                                       child: Padding(
                                         padding: const EdgeInsets.fromLTRB(
                                           16,
@@ -183,7 +182,7 @@ class _OffertProductCardState extends State<OffertProductCard> {
 
                                   // Mostrar precio final (ya sea de oferta o regular)
                                   Positioned(
-                                    bottom: 8,
+                                    bottom: 30,
                                     child: Padding(
                                       padding: const EdgeInsets.fromLTRB(
                                         16,
@@ -205,48 +204,8 @@ class _OffertProductCardState extends State<OffertProductCard> {
                                     ),
                                   ),
 
-                                  // Positioned(
-                                  //   bottom: 30,
-                                  //   child: Padding(
-                                  //     padding: const EdgeInsets.fromLTRB(
-                                  //       16,
-                                  //       0,
-                                  //       0,
-                                  //       0,
-                                  //     ),
-                                  //     child: Text(
-                                  //       '₲${numberFormat(product.price)}',
-                                  //       style: TextStyle(
-                                  //         decoration:
-                                  //             TextDecoration.lineThrough,
-                                  //         color: Theme.of(context).hintColor,
-                                  //         fontSize: 13,
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  // ),
-                                  // // PRECIO OFERTA
-                                  // Positioned(
-                                  //   bottom: 8,
-                                  //   child: Padding(
-                                  //     padding: const EdgeInsets.fromLTRB(
-                                  //       16,
-                                  //       0,
-                                  //       0,
-                                  //       0,
-                                  //     ),
-                                  //     child: Text(
-                                  //       '₲${numberFormat(product.priceSale)}',
-                                  //       style: TextStyle(
-                                  //         color: Colors.pink,
-                                  //         fontSize: 16,
-                                  //         fontWeight: FontWeight.bold,
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  // ),
                                   Positioned(
-                                    bottom: 0,
+                                    bottom: 28,
                                     right: 0,
                                     child: IconButton(
                                       padding: EdgeInsets.zero,
@@ -301,26 +260,46 @@ class _OffertProductCardState extends State<OffertProductCard> {
                                       },
                                     ),
                                   ),
+                                  // NOMBRE DEL PRODUCTO
+                                  Positioned(
+                                    bottom: 10,
+                                    right: 0,
+                                    child: SizedBox(
+                                      width: 134,
+                                      child: Text(
+                                        product.name.toUpperCase() +
+                                            product.name
+                                                .substring(1)
+                                                .toLowerCase(),
+                                        style: GoogleFonts.quicksand(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 13,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
                           ],
                         ),
                       ),
-                      const SizedBox(height: 10),
-                      SizedBox(
-                        width: 138,
-                        child: Text(
-                          product.name.toUpperCase() +
-                              product.name.substring(1).toLowerCase(),
-                          style: GoogleFonts.quicksand(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
+                      // const SizedBox(height: 10),
+                      // SizedBox(
+                      //   width: 138,
+                      //   child: Text(
+                      //     product.name.toUpperCase() +
+                      //         product.name.substring(1).toLowerCase(),
+                      //     style: GoogleFonts.quicksand(
+                      //       fontWeight: FontWeight.w600,
+                      //       fontSize: 13,
+                      //     ),
+                      //     maxLines: 1,
+                      //     overflow: TextOverflow.ellipsis,
+                      //   ),
+                      // ),
                     ],
                   ),
                 );

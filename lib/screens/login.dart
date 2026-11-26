@@ -192,31 +192,42 @@ class LoginScreenState extends State<LoginScreen> {
                             UsuarioModel? user = await AuthService()
                                 .signInWithGoogle(context);
                             if (user != null) {
-                              // Guardar usuario en la base de datos MySQL
+                              // 1. Guarda en tbl_users si aún no existe
                               await guardarUsuarioEnMySQL();
 
-                              // Mostrar mensaje de bienvenida
+                              // 2. Consulta get_user.php para obtener y guardar el id real en AuthProvider
+                              if (context.mounted) {
+                                final authProvider = Provider.of<AuthProvider>(
+                                  context,
+                                  listen: false,
+                                );
+                                await authProvider.refreshUserIdByEmail(
+                                  user.email,
+                                );
+                              }
+
+                              if (!context.mounted) return;
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text("Bienvenido, ${user.name}!"),
-                                  duration: Duration(seconds: 2),
+                                  duration: const Duration(seconds: 2),
                                 ),
                               );
 
-                              // Redirigir a MyHomePage después del mensaje
                               Navigator.pushReplacement(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => MyHomePage(),
+                                  builder: (context) => const MyHomePage(),
                                 ),
                               );
                             } else {
+                              if (!context.mounted) return;
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
+                                const SnackBar(
                                   content: Text(
                                     "Error al iniciar sesión. Inténtalo de nuevo.",
                                   ),
-                                  duration: Duration(seconds: 2),
+                                  duration: const Duration(seconds: 2),
                                 ),
                               );
                             }

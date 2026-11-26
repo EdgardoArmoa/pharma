@@ -54,8 +54,8 @@ class NewAppBar extends StatelessWidget implements PreferredSizeWidget {
             child: const Padding(
               padding: EdgeInsets.all(8.0),
               child: Icon(
-                Icons.menu,
-                size: 32.0, // Tamaño del icono
+                Icons.sort,
+                size: 36.0, // Tamaño del icono
               ),
             ),
           );
@@ -69,7 +69,7 @@ class NewAppBar extends StatelessWidget implements PreferredSizeWidget {
             Theme.of(context).brightness == Brightness.dark
                 ? 'assets/logoApbar-dark.png'
                 : 'assets/logo.png',
-            scale: 2.5,
+            scale: 2.02,
           ),
         ],
       ),
@@ -133,7 +133,7 @@ class ProductSearchDialogState extends State<ProductSearchDialog> {
       child: Stack(
         children: [
           Container(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(0.0),
             child: Column(
               mainAxisSize: MainAxisSize.min, // Ajusta el tamaño al contenido
               children: [
@@ -188,7 +188,7 @@ class ProductSearchDialogState extends State<ProductSearchDialog> {
                     ); // Realizar la búsqueda en tiempo real
                   },
                 ),
-                const SizedBox(height: 16.0),
+
                 // Mostrar resultados o indicador de carga
                 _isLoading
                     ? const CircularProgressIndicator()
@@ -243,25 +243,25 @@ class ProductSearchDialogState extends State<ProductSearchDialog> {
             ),
           ),
           // Botón para cerrar la ventana emergente
-          Positioned(
-            top: 0,
-            right: 0,
-            child: InkWell(
-              onTap:
-                  () =>
-                      Navigator.of(
-                        context,
-                      ).pop(), // Cerrar el cuadro de diálogo,
-              child: ClipOval(
-                child: Container(
-                  width: 26,
-                  height: 26,
-                  color: AppColors.grayDark,
-                  child: Icon(Icons.close, color: Colors.white, size: 16),
-                ),
-              ),
-            ),
-          ),
+          // Positioned(
+          //   top: 0,
+          //   right: 0,
+          //   child: InkWell(
+          //     onTap:
+          //         () =>
+          //             Navigator.of(
+          //               context,
+          //             ).pop(), // Cerrar el cuadro de diálogo,
+          //     child: ClipOval(
+          //       child: Container(
+          //         width: 24,
+          //         height: 24,
+          //         color: AppColors.grayDark,
+          //         child: Icon(Icons.close, color: Colors.white, size: 16),
+          //       ),
+          //     ),
+          //   ),
+          // ),
         ],
       ),
     );

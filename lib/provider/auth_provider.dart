@@ -124,6 +124,40 @@ class AuthProvider with ChangeNotifier {
     }
   }
 
+  Future<void> refreshUserIdByEmail(String email) async {
+    if (email.isEmpty) return;
+
+    try {
+      final uri = Uri.parse(
+        "https://farma.staweno.com/get_user.php?email=${Uri.encodeComponent(email)}",
+      );
+      final response = await http.get(uri);
+
+      if (response.statusCode == 200) {
+        final decoded = json.decode(response.body);
+        if (decoded is Map<String, dynamic> && decoded['id'] != null) {
+          final parsedId = int.tryParse(decoded['id'].toString()) ?? 0;
+          if (parsedId > 0) {
+            userId = parsedId;
+            _email = email;
+
+            final usuarioActualizado = UsuarioModel.fromJson(decoded);
+            _user = usuarioActualizado;
+            usuario = usuarioActualizado;
+
+            final prefs = await SharedPreferences.getInstance();
+            await prefs.setString('user', json.encode(decoded));
+            await prefs.setBool('isLogged', true);
+
+            notifyListeners();
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint("Error al refrescar userId desde get_user.php: $e");
+    }
+  }
+
   // CERRAR SESSION
   void clearUserData() {
     _user = null;

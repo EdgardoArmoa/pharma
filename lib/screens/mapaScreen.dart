@@ -34,27 +34,28 @@ class MapaScreenState extends State<MapaScreen> {
 
   Future<void> _obtenerCoordenadas(String direccion) async {
     if (direccion.isEmpty || !direccion.contains(',')) {
-      print(
+      debugPrint(
         'Error: La dirección debe incluir ciudad y calle separadas por una coma.',
       );
       setState(() {
-        latitud = -25.2637; // Coordenadas predeterminadas
+        latitud = -25.2637;
         longitud = -57.5759;
       });
       return;
     }
 
     try {
+      final queryCodificada = Uri.encodeComponent(direccion);
       final url = Uri.parse(
-        'https://nominatim.openstreetmap.org/search?q=$direccion&format=json&limit=1',
+        'https://nominatim.openstreetmap.org/search?q=$queryCodificada&format=json&limit=1',
       );
       final response = await http.get(
         url,
-        headers: {'User-Agent': 'shop/1.0 (armoanet@gmail.com)'},
+        headers: {'User-Agent': 'farmacia_app/1.0 (armoanet@gmail.com)'},
       );
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+        final data = jsonDecode(response.body) as List;
         if (data.isNotEmpty) {
           final nuevaLatitud = double.parse(data[0]['lat']);
           final nuevaLongitud = double.parse(data[0]['lon']);
@@ -64,18 +65,17 @@ class MapaScreenState extends State<MapaScreen> {
             longitud = nuevaLongitud;
           });
 
-          // Mueve el centro del mapa a las nuevas coordenadas
           _mapController.move(LatLng(nuevaLatitud, nuevaLongitud), 17);
         } else {
-          print('No se encontraron coordenadas para la dirección.');
+          debugPrint('No se encontraron coordenadas para la dirección.');
         }
       } else {
         throw Exception('Error al obtener coordenadas: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error: $e');
+      debugPrint('Error: $e');
       setState(() {
-        latitud = -25.2637; // Coordenadas predeterminadas
+        latitud = -25.2637;
         longitud = -57.5759;
       });
     }
@@ -99,8 +99,8 @@ class MapaScreenState extends State<MapaScreen> {
         ),
         children: [
           TileLayer(
-            urlTemplate: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-            subdomains: const ['a', 'b', 'c'],
+            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+            userAgentPackageName: 'com.ejemplo.farmacia_app',
           ),
           MarkerLayer(
             markers: [
@@ -129,8 +129,8 @@ class MapaScreenState extends State<MapaScreen> {
               'latitud': latitud,
               'longitud': longitud,
             });
+            Navigator.pop(context);
           } else {
-            // Manejo de error si la dirección no tiene el formato esperado
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text(
@@ -139,7 +139,6 @@ class MapaScreenState extends State<MapaScreen> {
               ),
             );
           }
-          Navigator.pop(context);
         },
       ),
     );

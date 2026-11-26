@@ -6,7 +6,6 @@ import 'package:pharma/model/colors.dart';
 import 'package:pharma/model/mapa_city.dart';
 import 'package:pharma/model/usuario_model.dart';
 import 'package:pharma/provider/auth_provider.dart' as local_auth;
-import 'package:pharma/provider/auth_provider.dart';
 import 'package:pharma/provider/cart_provider.dart';
 import 'package:pharma/provider/payment_provider.dart';
 import 'package:pharma/screens/add_address_screen.dart';
@@ -106,15 +105,31 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
   Future<void> sendOrder(BuildContext globalContext) async {
     try {
       final authProvider = Provider.of<local_auth.AuthProvider>(
-        context,
+        globalContext,
         listen: false,
       );
 
-      if (authProvider.userId == null) {
+      debugPrint(
+        "AUTH USER ID: ${authProvider.userId} (tipo: ${authProvider.userId.runtimeType})",
+      );
+
+      final parsedUserId =
+          int.tryParse(authProvider.userId?.toString() ?? '') ?? 0;
+
+      if (parsedUserId <= 0) {
         ScaffoldMessenger.of(globalContext).showSnackBar(
           const SnackBar(
-            content: Text("Error: No se pudo identificar al usuario"),
+            content: Text(
+              "Error: No se pudo identificar al usuario (ID inválido)",
+            ),
           ),
+        );
+        return;
+      }
+
+      if (widget.cartItems.isEmpty) {
+        ScaffoldMessenger.of(globalContext).showSnackBar(
+          const SnackBar(content: Text("Error: El carrito está vacío")),
         );
         return;
       }
@@ -125,7 +140,7 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
       );
 
       final Map<String, dynamic> orderData = {
-        'user_id': authProvider.userId, // Antes era 'customer_id'
+        'user_id': parsedUserId,
         'payment_method': paymentProvider.selectedMethod,
         'shipping_cost': shippingCost.toStringAsFixed(0),
         'total': (widget.totalConDescuento + shippingCost).toInt(),
@@ -152,59 +167,50 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                 }
                 : null,
       };
-      // print('ORDERDATA : ');
-      // print(jsonEncode(orderData)); // Verifica que se genera correctamente
-      // print("Ciudad antes de enviar: $selectedCityId");
+
+      debugPrint("ORDER_DATA: ${jsonEncode(orderData)}");
 
       final response = await http.post(
         Uri.parse("https://farma.staweno.com/insert_order.php"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(orderData),
       );
+
+      debugPrint("RESPONSE_BODY: ${response.body}");
+
       if (response.statusCode == 200) {
         final responseData = jsonDecode(response.body);
 
         if (responseData['status'] == 'success') {
-          // Vaciar el carrito
           Provider.of<CartProvider>(globalContext, listen: false).clearCart();
 
-          ScaffoldMessenger.of(context).showSnackBar(
+          ScaffoldMessenger.of(globalContext).showSnackBar(
             const SnackBar(content: Text("Pedido enviado exitosamente")),
           );
+
+          Future.delayed(const Duration(seconds: 2), () {
+            if (!globalContext.mounted) return;
+            Navigator.pushAndRemoveUntil(
+              globalContext,
+              MaterialPageRoute(builder: (context) => const MyHomePage()),
+              (route) => false,
+            );
+          });
         } else {
-          ScaffoldMessenger.of(context).showSnackBar(
+          ScaffoldMessenger.of(globalContext).showSnackBar(
             SnackBar(
-              content: Text("Error del servidor: ${responseData['message']}"),
+              content: Text(
+                "Error del servidor: ${responseData['message'] ?? 'No se pudo guardar el pedido'}",
+              ),
             ),
           );
         }
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
+        ScaffoldMessenger.of(globalContext).showSnackBar(
           SnackBar(
             content: Text(
               "Error al enviar el pedido: Código ${response.statusCode}",
             ),
-          ),
-        );
-      }
-
-      if (response.statusCode == 200) {
-        ScaffoldMessenger.of(globalContext).showSnackBar(
-          const SnackBar(content: Text("Pedido enviado exitosamente")),
-        );
-
-        // Redirigir después de 2 segundos
-        Future.delayed(const Duration(seconds: 2), () {
-          Navigator.pushAndRemoveUntil(
-            globalContext,
-            MaterialPageRoute(builder: (context) => const MyHomePage()),
-            (route) => false,
-          );
-        });
-      } else {
-        ScaffoldMessenger.of(globalContext).showSnackBar(
-          SnackBar(
-            content: Text("Error al enviar el pedido: ${response.body}"),
           ),
         );
       }
@@ -237,12 +243,6 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
       (sum, item) => sum + item.price * item.quantity,
     );
 
-    // if (widget.freeShipping == 1) {
-    //   shippingCost = 0;
-    // } else {
-    //   shippingCost;
-    // }
-
     shippingCost;
     total = subtotal + shippingCost;
     ciudadSelect;
@@ -264,10 +264,6 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
             usuario.email.isNotEmpty ? usuario.email : "Email no disponible";
         phoneController.text =
             usuario.phone.isNotEmpty ? usuario.phone : "Teléfono no disponible";
-        // addressController.text =
-        //     callePrincipal.isNotEmpty
-        //         ? usuario.address
-        //         : "Address no disponible";
 
         addressController.text = usuario.address;
 
@@ -861,18 +857,50 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                                 context,
                                 listen: false,
                               );
-                          final clienteId =
-                              Provider.of<AuthProvider>(
-                                context,
-                                listen: false,
-                              ).userId;
-                          if (clienteId == null) {
+                          final clienteId = authProvider.userId;
+                          if (clienteId == null || clienteId <= 0) {
                             return;
                           }
-                          // ASIGNAR CUPON AL CLIENTE
-                          if (paymentProvider.selectedMethod == "Pago Online" &&
-                              widget.cuponesSeleccionados.isNotEmpty &&
-                              authProvider.userId != null) {
+
+                          // 1. VALIDAR METODO DE PAGO
+                          if (paymentProvider.selectedMethod == "/" ||
+                              paymentProvider.selectedMethod.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  "Por favor seleccioná un método de pago",
+                                ),
+                              ),
+                            );
+                            return;
+                          }
+
+                          // 2. VALIDAR FORMULARIO Y UBICACIÓN
+                          if (!(formKey.currentState!.validate() &&
+                              (selectedCityId != null ||
+                                  selectedUbicacion != null))) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text(
+                                  "Por favor completa los campos requeridos antes de enviar el pedido",
+                                ),
+                              ),
+                            );
+                            return;
+                          }
+
+                          // 3. ENVIAR PEDIDO
+                          await sendOrder(context);
+
+                          // 4. ASIGNAR CUPON AL CLIENTE (verifica método de pago, mínimos y lista)
+                          final metodoPago = paymentProvider.selectedMethod;
+                          final metodosPermitidosCupon = {
+                            "Pago Online",
+                            "Efectivo",
+                          };
+
+                          if (metodosPermitidosCupon.contains(metodoPago) &&
+                              widget.cuponesSeleccionados.isNotEmpty) {
                             if (subtotal >= widget.montoMinimoCupon) {
                               int totalAsignados = 0;
                               for (
@@ -880,24 +908,34 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                                 i < widget.cuponesParaGenerar;
                                 i++
                               ) {
-                                await asignarCuponParaCliente(
-                                  clienteId,
-                                  widget.cuponesSeleccionados.first,
-                                );
-                                totalAsignados++;
+                                final rawCuponId =
+                                    widget.cuponesSeleccionados.first;
+                                final cuponId =
+                                    int.tryParse(rawCuponId.toString()) ?? 0;
+
+                                if (cuponId > 0) {
+                                  final ok = await asignarCuponParaCliente(
+                                    clienteId,
+                                    cuponId,
+                                  );
+                                  if (ok) {
+                                    totalAsignados++;
+                                  }
+                                }
                               }
 
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    '🎉 Se asignaron $totalAsignados cupones al cliente',
+                              if (context.mounted && totalAsignados > 0) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      '🎉 Se asignaron $totalAsignados cupones al cliente',
+                                    ),
+                                    backgroundColor: Colors.green,
+                                    duration: const Duration(seconds: 3),
                                   ),
-                                  backgroundColor: Colors.green,
-                                  duration: const Duration(seconds: 3),
-                                ),
-                              );
-                            } else {
-                              // 🚫 No se cumple el mínimo
+                                );
+                              }
+                            } else if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
                                   content: Text(
@@ -910,27 +948,8 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                             }
                           }
 
-                          // VALIDAR METODO DE PAGO
-                          if (paymentProvider.selectedMethod == "/" ||
-                              paymentProvider.selectedMethod.isEmpty) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                // validadcion de metodo de pago
-                                content: Text(
-                                  "Por favor seleccioná un método de pago",
-                                ),
-                              ),
-                            );
-                            return; // Evita que continúe si no hay método
-                          }
-
-                          if (formKey.currentState!.validate() &&
-                              (selectedCityId != null ||
-                                  selectedUbicacion != null)) {
-                            await sendOrder(context);
-
-                            // DESCONTAR CUPON UTILIZADO
-                            // if (widget.cuponSeleccionado != null) {
+                          // 5. MARCAR CUPON UTILIZADO (solo si hay uno seleccionado)
+                          if (widget.cuponSeleccionado != 0) {
                             await http.post(
                               Uri.parse(
                                 'https://farma.staweno.com/cupones/marcar_cupon_utilizado.php',
@@ -940,20 +959,109 @@ class _OrderConfirmationScreenState extends State<OrderConfirmationScreen> {
                                 'cliente_cupon_id': widget.cuponSeleccionado,
                               }),
                             );
-                            // }
-
-                            // Vacía el formulario después de enviar el pedido
-                            clearFormFields();
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                  "Por favor completa los campos requeridos antes de enviar el pedido",
-                                ),
-                              ),
-                            );
                           }
+
+                          clearFormFields();
                         },
+                        // onPressed: () async {
+                        //   final authProvider =
+                        //       Provider.of<local_auth.AuthProvider>(
+                        //         context,
+                        //         listen: false,
+                        //       );
+                        //   final clienteId =
+                        //       Provider.of<AuthProvider>(
+                        //         context,
+                        //         listen: false,
+                        //       ).userId;
+                        //   if (clienteId == null) {
+                        //     return;
+                        //   }
+                        //   // ASIGNAR CUPON AL CLIENTE
+                        //   if (paymentProvider.selectedMethod == "Pago Online" &&
+                        //       widget.cuponesSeleccionados.isNotEmpty &&
+                        //       authProvider.userId != null) {
+                        //     if (subtotal >= widget.montoMinimoCupon) {
+                        //       int totalAsignados = 0;
+                        //       for (
+                        //         int i = 0;
+                        //         i < widget.cuponesParaGenerar;
+                        //         i++
+                        //       ) {
+                        //         await asignarCuponParaCliente(
+                        //           clienteId,
+                        //           widget.cuponesSeleccionados.first,
+                        //         );
+                        //         totalAsignados++;
+                        //       }
+
+                        //       ScaffoldMessenger.of(context).showSnackBar(
+                        //         SnackBar(
+                        //           content: Text(
+                        //             '🎉 Se asignaron $totalAsignados cupones al cliente',
+                        //           ),
+                        //           backgroundColor: Colors.green,
+                        //           duration: const Duration(seconds: 3),
+                        //         ),
+                        //       );
+                        //     } else {
+                        //       // 🚫 No se cumple el mínimo
+                        //       ScaffoldMessenger.of(context).showSnackBar(
+                        //         SnackBar(
+                        //           content: Text(
+                        //             '⚠️ La compra debe superar ₲${widget.montoMinimoCupon.toInt()} para recibir cupones',
+                        //           ),
+                        //           backgroundColor: Colors.orange,
+                        //           duration: const Duration(seconds: 3),
+                        //         ),
+                        //       );
+                        //     }
+                        //   }
+
+                        //   // VALIDAR METODO DE PAGO
+                        //   if (paymentProvider.selectedMethod == "/" ||
+                        //       paymentProvider.selectedMethod.isEmpty) {
+                        //     ScaffoldMessenger.of(context).showSnackBar(
+                        //       const SnackBar(
+                        //         // validadcion de metodo de pago
+                        //         content: Text(
+                        //           "Por favor seleccioná un método de pago",
+                        //         ),
+                        //       ),
+                        //     );
+                        //     return; // Evita que continúe si no hay método
+                        //   }
+
+                        //   if (formKey.currentState!.validate() &&
+                        //       (selectedCityId != null ||
+                        //           selectedUbicacion != null)) {
+                        //     await sendOrder(context);
+
+                        //     // DESCONTAR CUPON UTILIZADO
+                        //     // if (widget.cuponSeleccionado != null) {
+                        //     await http.post(
+                        //       Uri.parse(
+                        //         'https://farma.staweno.com/cupones/marcar_cupon_utilizado.php',
+                        //       ),
+                        //       headers: {'Content-Type': 'application/json'},
+                        //       body: jsonEncode({
+                        //         'cliente_cupon_id': widget.cuponSeleccionado,
+                        //       }),
+                        //     );
+                        //     // }
+
+                        //     // Vacía el formulario después de enviar el pedido
+                        //     clearFormFields();
+                        //   } else {
+                        //     ScaffoldMessenger.of(context).showSnackBar(
+                        //       const SnackBar(
+                        //         content: Text(
+                        //           "Por favor completa los campos requeridos antes de enviar el pedido",
+                        //         ),
+                        //       ),
+                        //     );
+                        //   }
+                        // },
                         child: const Text(
                           'Enviar Pedido',
                           style: TextStyle(
