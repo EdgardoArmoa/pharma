@@ -26,10 +26,7 @@ class NewAppBar extends StatelessWidget implements PreferredSizeWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.all(Radius.circular(26)),
               border: Border.all(
-                color:
-                    Theme.of(context).brightness == Brightness.dark
-                        ? AppColors.blueLight
-                        : AppColors.blueDark,
+                color: Theme.of(context).brightness == Brightness.dark ? AppColors.blueLight : AppColors.blueDark,
 
                 width: 1, // Grosor de la línea
               ),
@@ -38,10 +35,7 @@ class NewAppBar extends StatelessWidget implements PreferredSizeWidget {
             child: IconButton(
               icon: const Icon(Icons.search, size: 24),
               onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => const ProductSearchDialog(),
-                );
+                showDialog(context: context, builder: (context) => const ProductSearchDialog());
               },
             ),
           ),
@@ -65,12 +59,7 @@ class NewAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset(
-            Theme.of(context).brightness == Brightness.dark
-                ? 'assets/logoApbar-dark.png'
-                : 'assets/logo.png',
-            scale: 2.02,
-          ),
+          Image.asset(Theme.of(context).brightness == Brightness.dark ? 'assets/logoApbar-dark.png' : 'assets/logo.png', scale: 2.02),
         ],
       ),
     );
@@ -106,8 +95,7 @@ class ProductSearchDialogState extends State<ProductSearchDialog> {
     });
 
     try {
-      final String url =
-          "https://farma.staweno.com/search_products.php?query=$query&limit=20";
+      final String url = "https://farma.staweno.com/search_products.php?query=$query&limit=20";
       final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
@@ -142,26 +130,18 @@ class ProductSearchDialogState extends State<ProductSearchDialog> {
                   controller: _searchController,
                   decoration: InputDecoration(
                     hintText: "Buscar productos...",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                    ),
+                    border: OutlineInputBorder(borderRadius: BorderRadius.circular(30.0)),
                     enabledBorder: OutlineInputBorder(
                       borderSide: const BorderSide(color: AppColors.grayLight),
                       borderRadius: BorderRadius.circular(30.0),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: AppColors.grayDark,
-                        width: 2.0,
-                      ),
+                      borderSide: const BorderSide(color: AppColors.grayDark, width: 2.0),
                       borderRadius: BorderRadius.circular(30.0),
                     ),
                     filled: true,
                     fillColor: Colors.white,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 16.0,
-                      vertical: 12.0,
-                    ),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
                     suffixIcon: IconButton(
                       icon: const Icon(Icons.clear),
                       onPressed: () {
@@ -183,9 +163,7 @@ class ProductSearchDialogState extends State<ProductSearchDialog> {
                       return;
                     }
 
-                    searchProducts(
-                      value,
-                    ); // Realizar la búsqueda en tiempo real
+                    searchProducts(value); // Realizar la búsqueda en tiempo real
                   },
                 ),
 
@@ -218,21 +196,11 @@ class ProductSearchDialogState extends State<ProductSearchDialog> {
                               style: const TextStyle(fontSize: 13),
                               overflow: TextOverflow.ellipsis,
                             ),
-                            subtitle: Text(
-                              "₲. ${product['price'] ?? '0'}",
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                            subtitle: Text("₲. ${product['price'] ?? '0'}", style: const TextStyle(fontWeight: FontWeight.bold)),
                             onTap: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(
-                                  builder:
-                                      (context) => ProductDetail(
-                                        data: Product.fromJson(product),
-                                      ),
-                                ),
+                                MaterialPageRoute(builder: (context) => ProductDetail(data: Product.fromJson(product))),
                               );
                             },
                           );

@@ -57,10 +57,7 @@ class MyApp extends StatelessWidget {
       theme: lightTheme,
       darkTheme: darkTheme,
       initialRoute: 'SplashScreenState',
-      routes: {
-        'MyHomePage': (context) => const MyHomePage(),
-        'SplashScreenState': (context) => SplashScreen(),
-      },
+      routes: {'MyHomePage': (context) => const MyHomePage(), 'SplashScreenState': (context) => SplashScreen()},
     );
   }
 }

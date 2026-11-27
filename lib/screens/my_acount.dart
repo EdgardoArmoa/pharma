@@ -47,15 +47,11 @@ class _MyAcountState extends State<MyAcount> {
 
   @override
   Widget build(BuildContext context) {
-    final authProvider = Provider.of<local_auth_provider.AuthProvider>(
-      context,
-      listen: false,
-    );
+    final authProvider = Provider.of<local_auth_provider.AuthProvider>(context, listen: false);
     final nombre = authProvider.user?.name ?? 'Usuario';
 
     final photoUrl =
-        (authProvider.user?.photo != null &&
-                authProvider.user!.photo.isNotEmpty)
+        (authProvider.user?.photo != null && authProvider.user!.photo.isNotEmpty)
             ? authProvider.user!.photo
             : 'https://cdn-icons-png.flaticon.com/512/64/64572.png';
 
@@ -69,10 +65,7 @@ class _MyAcountState extends State<MyAcount> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
           color: AppColors.white,
         ),
         child: SingleChildScrollView(
@@ -80,19 +73,14 @@ class _MyAcountState extends State<MyAcount> {
           child: Padding(
             padding: const EdgeInsets.fromLTRB(20, 30, 20, 20),
             child: Column(
-              crossAxisAlignment:
-                  CrossAxisAlignment
-                      .stretch, // Para que los bloques se estiren horizontalmente
+              crossAxisAlignment: CrossAxisAlignment.stretch, // Para que los bloques se estiren horizontalmente
               children: <Widget>[
                 Row(
                   children: [
                     Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(52.0),
-                        border: Border.all(
-                          color: const Color.fromARGB(255, 253, 226, 229),
-                          width: 2,
-                        ),
+                        border: Border.all(color: const Color.fromARGB(255, 253, 226, 229), width: 2),
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(3),
@@ -104,15 +92,9 @@ class _MyAcountState extends State<MyAcount> {
                                   ? Shimmer.fromColors(
                                     baseColor: Colors.grey[300]!,
                                     highlightColor: Colors.grey[100]!,
-                                    child: CircleAvatar(
-                                      radius: 40,
-                                      backgroundColor: Colors.grey[300],
-                                    ),
+                                    child: CircleAvatar(radius: 40, backgroundColor: Colors.grey[300]),
                                   )
-                                  : CircleAvatar(
-                                    radius: 40,
-                                    backgroundImage: NetworkImage(photoUrl),
-                                  ),
+                                  : CircleAvatar(radius: 40, backgroundImage: NetworkImage(photoUrl)),
                         ),
                       ),
                     ),
@@ -122,16 +104,7 @@ class _MyAcountState extends State<MyAcount> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text("Hola, ", style: TextStyle(fontSize: 14)),
-                        SizedBox(
-                          child: Text(
-                            nombre,
-                            style: const TextStyle(
-                              fontSize: 20,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            maxLines: 1,
-                          ),
-                        ),
+                        SizedBox(child: Text(nombre, style: const TextStyle(fontSize: 20, overflow: TextOverflow.ellipsis), maxLines: 1)),
                       ],
                     ),
                   ],
@@ -148,23 +121,14 @@ class _MyAcountState extends State<MyAcount> {
                   children: [
                     Expanded(
                       child: ElevatedButton.icon(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.blueAcua,
-                        ),
+                        style: ElevatedButton.styleFrom(backgroundColor: AppColors.blueAcua),
                         onPressed: () async {
                           await logoutUser(context);
                         },
-                        icon: const Icon(
-                          Icons.logout,
-                          color: Colors.white,
-                          size: 24,
-                        ), // Aquí defines el icono que quieres mostrar
+                        icon: const Icon(Icons.logout, color: Colors.white, size: 24), // Aquí defines el icono que quieres mostrar
                         label: const Padding(
                           padding: EdgeInsets.all(10),
-                          child: Text(
-                            "Cerrar sesión",
-                            style: TextStyle(color: Colors.white, fontSize: 20),
-                          ),
+                          child: Text("Cerrar sesión", style: TextStyle(color: Colors.white, fontSize: 20)),
                         ),
                       ),
                     ),
@@ -195,12 +159,7 @@ Widget _widgetBloque1(context) {
               leading: const Icon(Icons.person),
               title: const Text('Mi Perfil'),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ProfileScreen(),
-                  ),
-                );
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfileScreen()));
               },
               trailing: const Icon(Icons.arrow_forward_ios_outlined),
             ),
@@ -208,12 +167,7 @@ Widget _widgetBloque1(context) {
               leading: const Icon(Icons.place),
               title: const Text('Direcciones'),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const AddressScreen(),
-                  ),
-                );
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const AddressScreen()));
               },
               trailing: const Icon(Icons.arrow_forward_ios_outlined),
             ),
@@ -252,12 +206,7 @@ Widget _widgetBloque2(BuildContext context, dynamic idUser) {
               leading: const Icon(Icons.list_rounded),
               title: const Text('Mis Pedidos'),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MyOrders(userId: idUser),
-                  ),
-                );
+                Navigator.push(context, MaterialPageRoute(builder: (context) => MyOrders(userId: idUser)));
               },
               trailing: const Icon(Icons.arrow_forward_ios_outlined),
             ),
@@ -281,26 +230,15 @@ Widget _widgetBloque3(BuildContext context) {
           children: [
             ListTile(
               leading: const Icon(Icons.notifications),
-              title: const Text(
-                'Alertas y notificaciones',
-                style: TextStyle(fontSize: 14),
-              ),
+              title: const Text('Alertas y notificaciones', style: TextStyle(fontSize: 14)),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const NotificationScreen(),
-                  ),
-                );
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationScreen()));
               },
               trailing: const Icon(Icons.arrow_forward_ios_outlined),
             ),
             ListTile(
               leading: const Icon(Icons.info),
-              title: const Text(
-                'Información del servicio',
-                style: TextStyle(fontSize: 14),
-              ),
+              title: const Text('Información del servicio', style: TextStyle(fontSize: 14)),
               onTap: () {},
               trailing: const Icon(Icons.arrow_forward_ios_outlined),
             ),

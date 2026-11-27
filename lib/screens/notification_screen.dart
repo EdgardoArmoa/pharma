@@ -15,9 +15,7 @@ class NotificationScreen extends StatefulWidget {
 class _NotificationScreenState extends State<NotificationScreen> {
   Future<int?> obtenerUsuarioActual() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getInt(
-      'usuario_id',
-    ); // Asegúrate de guardar este dato al hacer login
+    return prefs.getInt('usuario_id'); // Asegúrate de guardar este dato al hacer login
   }
 
   @override
@@ -26,10 +24,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
-      final provider = Provider.of<NotificacionesProvider>(
-        context,
-        listen: false,
-      );
+      final provider = Provider.of<NotificacionesProvider>(context, listen: false);
       provider.obtenerNotificaciones(authProvider.userId!);
     });
   }
@@ -42,24 +37,17 @@ class _NotificationScreenState extends State<NotificationScreen> {
       body: Container(
         height: MediaQuery.of(context).size.height,
         decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
           color: Color.fromARGB(255, 255, 255, 255),
         ),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(5, 20, 5, 20),
           child: Consumer<NotificacionesProvider>(
             builder: (context, provider, child) {
-              print(
-                "Notificaciones en Provider: ${provider.notificaciones.length}",
-              );
+              print("Notificaciones en Provider: ${provider.notificaciones.length}");
 
               if (provider.cargando) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                ); // Mostrar indicador de carga
+                return const Center(child: CircularProgressIndicator()); // Mostrar indicador de carga
               }
 
               if (provider.notificaciones.isEmpty) {
@@ -73,57 +61,23 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   return ListTile(
                     title: Text(
                       notificacion.nombre,
-                      style: const TextStyle(
-                        overflow: TextOverflow.ellipsis,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      style: const TextStyle(overflow: TextOverflow.ellipsis, fontSize: 16, fontWeight: FontWeight.w600),
                     ),
-                    subtitle: Text(
-                      notificacion.mensaje,
-                      style: const TextStyle(
-                        overflow: TextOverflow.ellipsis,
-                        fontSize: 12,
-                      ),
-                    ),
+                    subtitle: Text(notificacion.mensaje, style: const TextStyle(overflow: TextOverflow.ellipsis, fontSize: 12)),
                     leading:
                         notificacion.urgente
-                            ? Icon(
-                              Icons.notifications_active,
-                              color:
-                                  notificacion.fueLeida
-                                      ? Colors.grey
-                                      : Colors.red,
-                            )
-                            : Icon(
-                              Icons.notifications,
-                              color:
-                                  notificacion.fueLeida
-                                      ? Colors.grey
-                                      : Colors.orange,
-                            ),
+                            ? Icon(Icons.notifications_active, color: notificacion.fueLeida ? Colors.grey : Colors.red)
+                            : Icon(Icons.notifications, color: notificacion.fueLeida ? Colors.grey : Colors.orange),
                     trailing:
                         notificacion.fueLeida
-                            ? const Icon(
-                              Icons.remove_red_eye,
-                              color: Color.fromARGB(255, 216, 216, 216),
-                            )
-                            : const Icon(
-                              Icons.remove_red_eye,
-                              color: Color.fromARGB(255, 180, 211, 66),
-                            ),
+                            ? const Icon(Icons.remove_red_eye, color: Color.fromARGB(255, 216, 216, 216))
+                            : const Icon(Icons.remove_red_eye, color: Color.fromARGB(255, 180, 211, 66)),
                     onTap: () {
-                      provider.marcarComoLeida(
-                        notificacion.id,
-                      ); // Marca como leída
+                      provider.marcarComoLeida(notificacion.id); // Marca como leída
 
                       showModalBottomSheet(
                         context: context,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(20),
-                          ),
-                        ),
+                        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
                         builder: (context) {
                           return SingleChildScrollView(
                             child: Padding(
@@ -132,25 +86,13 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    notificacion.nombre,
-                                    style: const TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                                  Text(notificacion.nombre, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                                   const SizedBox(height: 10),
-                                  Text(
-                                    notificacion.mensaje,
-                                    style: const TextStyle(fontSize: 16),
-                                  ),
+                                  Text(notificacion.mensaje, style: const TextStyle(fontSize: 16)),
                                   const SizedBox(height: 20),
                                   Align(
                                     alignment: Alignment.centerRight,
-                                    child: ElevatedButton(
-                                      onPressed: () => Navigator.pop(context),
-                                      child: const Text("Cerrar"),
-                                    ),
+                                    child: ElevatedButton(onPressed: () => Navigator.pop(context), child: const Text("Cerrar")),
                                   ),
                                 ],
                               ),

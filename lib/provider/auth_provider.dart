@@ -45,17 +45,11 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<Map<String, dynamic>?> loginUser(
-    String username,
-    String password,
-  ) async {
+  Future<Map<String, dynamic>?> loginUser(String username, String password) async {
     final url = Uri.parse("https://farma.staweno.com/login.php");
 
     try {
-      final response = await http.post(
-        url,
-        body: {'name': username, 'password': password},
-      );
+      final response = await http.post(url, body: {'name': username, 'password': password});
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
@@ -72,25 +66,15 @@ class AuthProvider with ChangeNotifier {
         return {"status": "error", "message": "Error de conexión"};
       }
     } catch (e) {
-      return {
-        "status": "error",
-        "message": "Error al conectar con el servidor",
-      };
+      return {"status": "error", "message": "Error al conectar con el servidor"};
     }
   }
 
-  Future<Map<String, dynamic>?> registerUser(
-    String username,
-    String email,
-    String password,
-  ) async {
+  Future<Map<String, dynamic>?> registerUser(String username, String email, String password) async {
     final url = Uri.parse("https://farma.staweno.com/register.php");
 
     try {
-      final response = await http.post(
-        url,
-        body: {'name': username, 'email': email, 'password': password},
-      );
+      final response = await http.post(url, body: {'name': username, 'email': email, 'password': password});
 
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
@@ -99,10 +83,7 @@ class AuthProvider with ChangeNotifier {
         return {"status": "error", "message": "Error de conexión"};
       }
     } catch (e) {
-      return {
-        "status": "error",
-        "message": "Error al conectar con el servidor",
-      };
+      return {"status": "error", "message": "Error al conectar con el servidor"};
     }
   }
 
@@ -128,9 +109,7 @@ class AuthProvider with ChangeNotifier {
     if (email.isEmpty) return;
 
     try {
-      final uri = Uri.parse(
-        "https://farma.staweno.com/get_user.php?email=${Uri.encodeComponent(email)}",
-      );
+      final uri = Uri.parse("https://farma.staweno.com/get_user.php?email=${Uri.encodeComponent(email)}");
       final response = await http.get(uri);
 
       if (response.statusCode == 200) {

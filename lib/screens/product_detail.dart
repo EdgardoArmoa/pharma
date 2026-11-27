@@ -42,11 +42,7 @@ class ProductDetailState extends State<ProductDetail> {
   void _changeProduct(int index) {
     setState(() {
       _currentIndex = index;
-      _pageController.animateToPage(
-        index,
-        duration: Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
-      );
+      _pageController.animateToPage(index, duration: Duration(milliseconds: 500), curve: Curves.easeInOut);
     });
   }
 
@@ -56,17 +52,14 @@ class ProductDetailState extends State<ProductDetail> {
     // final tieneCupon = cuponProvider.productoTieneCupon(widget.data.id);
     final cupon = cuponProvider.obtenerCuponDeProducto(widget.data.id);
 
-    // final cupon = Provider.of<CuponProvider>(
-    //   context,
-    // ).obtenerCuponDeProducto(widget.data.id);
+    final bool hasValidSalePrice =
+        widget.data.onSale == 1 && widget.data.priceSale.isNotEmpty && (double.tryParse(widget.data.priceSale) ?? 0) > 0;
+
+    final double effectivePrice =
+        double.tryParse(hasValidSalePrice ? widget.data.priceSale : widget.data.price) ?? double.tryParse(widget.data.price) ?? 0.0;
 
     final List<String> productImages =
-        [
-          widget.data.image,
-          widget.data.gal1,
-          widget.data.gal2,
-          widget.data.gal3,
-        ].where((img) => img.trim().isNotEmpty).toList();
+        [widget.data.image, widget.data.gal1, widget.data.gal2, widget.data.gal3].where((img) => img.trim().isNotEmpty).toList();
 
     return Container(
       decoration: BoxDecoration(
@@ -79,10 +72,7 @@ class ProductDetailState extends State<ProductDetail> {
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            const Color.fromARGB(255, 250, 254, 255),
-            const Color.fromARGB(255, 232, 234, 235),
-          ],
+          colors: [const Color.fromARGB(255, 250, 254, 255), const Color.fromARGB(255, 232, 234, 235)],
         ),
       ),
 
@@ -92,11 +82,9 @@ class ProductDetailState extends State<ProductDetail> {
         right: false,
         bottom: true,
         child: Scaffold(
-          extendBodyBehindAppBar:
-              true, // Permite que el body suba detrás del AppBar
+          extendBodyBehindAppBar: true, // Permite que el body suba detrás del AppBar
           appBar: AppBar(
-            backgroundColor:
-                Colors.transparent, // Transparente para ver lo que hay detrás
+            backgroundColor: Colors.transparent, // Transparente para ver lo que hay detrás
             elevation: 0,
             scrolledUnderElevation: 0,
             actions: [
@@ -104,24 +92,13 @@ class ProductDetailState extends State<ProductDetail> {
                 children: [
                   InkWell(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CartScreenView(),
-                        ),
-                      );
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => CartScreenView()));
                     },
                     child: Container(
                       margin: EdgeInsets.fromLTRB(0, 0, 20, 0),
                       padding: EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                        color: AppColors.blueDark,
-                        borderRadius: BorderRadius.all(Radius.circular(30)),
-                      ),
-                      child: Icon(
-                        Icons.shopping_bag_outlined,
-                        color: Colors.white,
-                      ),
+                      decoration: BoxDecoration(color: AppColors.blueDark, borderRadius: BorderRadius.all(Radius.circular(30))),
+                      child: Icon(Icons.shopping_bag_outlined, color: Colors.white),
                     ),
                   ),
 
@@ -134,18 +111,11 @@ class ProductDetailState extends State<ProductDetail> {
                           visible: cart.totalDistinctItems != 0,
                           child: Container(
                             padding: const EdgeInsets.all(6),
-                            decoration: BoxDecoration(
-                              color: Colors.red,
-                              shape: BoxShape.circle,
-                            ),
+                            decoration: BoxDecoration(color: Colors.red, shape: BoxShape.circle),
 
                             child: Text(
-                              cart.totalDistinctItems
-                                  .toString(), // Muestra la cantidad total de ítems
-                              style: TextStyle(
-                                fontSize: 10,
-                                color: Colors.white,
-                              ),
+                              cart.totalDistinctItems.toString(), // Muestra la cantidad total de ítems
+                              style: TextStyle(fontSize: 10, color: Colors.white),
                             ),
                           ),
                         ),
@@ -159,10 +129,7 @@ class ProductDetailState extends State<ProductDetail> {
           backgroundColor: Colors.transparent,
           body: Container(
             decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(20),
-                topRight: Radius.circular(20),
-              ),
+              borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
               color: Colors.white,
             ),
             child: Column(
@@ -191,16 +158,8 @@ class ProductDetailState extends State<ProductDetail> {
                           right: 10,
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
-                            children: List.generate(productImages.length, (
-                              index,
-                            ) {
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 10),
-                                child: _buildButton(
-                                  index,
-                                  productImages[index],
-                                ),
-                              );
+                            children: List.generate(productImages.length, (index) {
+                              return Padding(padding: const EdgeInsets.only(bottom: 10), child: _buildButton(index, productImages[index]));
                             }),
                           ),
                         ),
@@ -211,30 +170,16 @@ class ProductDetailState extends State<ProductDetail> {
                           left: 10,
                           child: Row(
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-                                child: Image.asset(
-                                  'assets/cupon2.png',
-                                  scale: 2.8,
-                                ),
-                              ),
+                              Padding(padding: const EdgeInsets.fromLTRB(0, 0, 10, 0), child: Image.asset('assets/cupon2.png', scale: 3.2)),
                               SizedBox(
                                 width: 300,
                                 child: Padding(
-                                  padding: const EdgeInsets.fromLTRB(
-                                    0,
-                                    0,
-                                    10,
-                                    0,
-                                  ),
+                                  padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
                                   child: Text(
                                     cupon.tipo == "percentage"
                                         ? "Este producto te genera el ${cupon.monto.toStringAsFixed(0)}% OFF en cupon de descuentos en tus compras posteriores"
                                         : "Este producto te genera  ₲${numberFormat(cupon.monto.toStringAsFixed(0))} en cupon de descuentos en tus compras posteriores",
-                                    style: TextStyle(
-                                      overflow: TextOverflow.ellipsis,
-                                      fontSize: 10,
-                                    ),
+                                    style: TextStyle(overflow: TextOverflow.ellipsis, fontSize: 10),
                                     maxLines: 2,
                                   ),
                                 ),
@@ -250,10 +195,7 @@ class ProductDetailState extends State<ProductDetail> {
                   child: Container(
                     decoration: BoxDecoration(
                       color: const Color.fromARGB(255, 224, 234, 250),
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(30),
-                        topRight: Radius.circular(30),
-                      ),
+                      borderRadius: BorderRadius.only(topLeft: Radius.circular(30), topRight: Radius.circular(30)),
                     ),
                     child: Stack(
                       children: [
@@ -271,44 +213,19 @@ class ProductDetailState extends State<ProductDetail> {
                                         context: context,
                                         builder: (BuildContext context) {
                                           return Container(
-                                            padding: const EdgeInsets.fromLTRB(
-                                              20,
-                                              15,
-                                              25,
-                                              10,
-                                            ),
-                                            height:
-                                                MediaQuery.of(
-                                                  context,
-                                                ).size.height *
-                                                0.8,
+                                            padding: const EdgeInsets.fromLTRB(20, 15, 25, 10),
+                                            height: MediaQuery.of(context).size.height * 0.8,
                                             child: SingleChildScrollView(
                                               child: Column(
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
                                                   Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
+                                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                     children: [
-                                                      const Text(
-                                                        "Detalles ",
-                                                        style: TextStyle(
-                                                          fontSize: 18,
-                                                          fontWeight:
-                                                              FontWeight.w600,
-                                                        ),
-                                                      ),
+                                                      const Text("Detalles ", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
                                                       IconButton(
-                                                        onPressed:
-                                                            () => Navigator.pop(
-                                                              context,
-                                                            ),
-                                                        icon: const Icon(
-                                                          Icons
-                                                              .keyboard_arrow_down_rounded,
-                                                          size: 28,
-                                                        ),
+                                                        onPressed: () => Navigator.pop(context),
+                                                        icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 28),
                                                       ),
                                                     ],
                                                   ),
@@ -321,12 +238,16 @@ class ProductDetailState extends State<ProductDetail> {
                                       ),
                                     },
                                 child: Container(
+                                  margin: EdgeInsets.all(6),
                                   width: 40,
                                   height: 40,
                                   decoration: BoxDecoration(
                                     color: AppColors.blueDark,
                                     borderRadius: BorderRadius.only(
-                                      topRight: Radius.circular(30),
+                                      topLeft: Radius.circular(20),
+                                      topRight: Radius.circular(20),
+                                      bottomLeft: Radius.circular(20),
+                                      bottomRight: Radius.circular(20),
                                     ),
                                   ),
 
@@ -346,12 +267,7 @@ class ProductDetailState extends State<ProductDetail> {
                                 width: 326,
                                 child: Text(
                                   widget.data.name,
-                                  style: TextStyle(
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w400,
-                                    height: 1.1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
+                                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w400, height: 1.1, overflow: TextOverflow.ellipsis),
                                   maxLines: 2,
                                 ),
                               ),
@@ -364,12 +280,7 @@ class ProductDetailState extends State<ProductDetail> {
                           left: 20,
                           child: Row(
                             children: [
-                              Text(
-                                widget.data.categoryName.toString(),
-                                style: TextStyle(
-                                  color: const Color.fromARGB(255, 90, 90, 90),
-                                ),
-                              ),
+                              Text(widget.data.categoryName.toString(), style: TextStyle(color: const Color.fromARGB(255, 90, 90, 90))),
                             ],
                           ),
                         ),
@@ -380,32 +291,47 @@ class ProductDetailState extends State<ProductDetail> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Row(
                                     children: [
-                                      const Text(
-                                        '₲ ',
-                                        style: TextStyle(
-                                          fontSize: 18.0,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                      Text(
-                                        numberFormat(widget.data.price),
-                                        style: const TextStyle(
-                                          fontSize: 28.0,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.w600,
-                                        ),
+                                      Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          if (hasValidSalePrice)
+                                            Text(
+                                              '₲ ${numberFormat(widget.data.price)}',
+                                              style: TextStyle(
+                                                fontSize: 16.0,
+                                                color: Theme.of(context).hintColor,
+                                                decoration: TextDecoration.lineThrough,
+                                              ),
+                                            ),
+                                          Row(
+                                            children: [
+                                              Text(
+                                                '₲ ',
+                                                style: TextStyle(
+                                                  fontSize: 20.0,
+                                                  color: hasValidSalePrice ? Colors.pink : Colors.black,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                              Text(
+                                                numberFormat(hasValidSalePrice ? widget.data.priceSale : widget.data.price),
+                                                style: TextStyle(
+                                                  fontSize: 28.0,
+                                                  color: hasValidSalePrice ? Colors.pink : Colors.black,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
                                       ),
                                     ],
                                   ),
-                                  QuantityField(
-                                    onQuantityChanged: _handleQuantityChanged,
-                                  ),
+                                  QuantityField(onQuantityChanged: _handleQuantityChanged),
                                 ],
                               ),
                             ),
@@ -419,9 +345,7 @@ class ProductDetailState extends State<ProductDetail> {
                                     height: 56,
                                     decoration: BoxDecoration(
                                       border: Border.all(
-                                        color:
-                                            AppColors
-                                                .blueDark, // Color del borde
+                                        color: AppColors.blueDark, // Color del borde
                                         width: 1,
                                       ),
                                       borderRadius: BorderRadius.circular(14),
@@ -435,82 +359,41 @@ class ProductDetailState extends State<ProductDetail> {
                                   Expanded(
                                     child: TextButton.icon(
                                       style: TextButton.styleFrom(
-                                        textStyle: const TextStyle(
-                                          color: Colors.black,
-                                        ),
+                                        textStyle: const TextStyle(color: Colors.black),
                                         backgroundColor: AppColors.blueDark,
 
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            14.0,
-                                          ),
-                                        ),
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14.0)),
                                       ),
                                       onPressed: () {
-                                        final authProvider =
-                                            Provider.of<AuthProvider>(
-                                              context,
-                                              listen: false,
-                                            );
+                                        final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
                                         if (!authProvider.isAuthenticated) {
                                           // Si el usuario no está logeado, redirigirlo a LoginScreen
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder:
-                                                  (context) =>
-                                                      const LoginScreen(),
-                                            ),
-                                          );
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
                                           return;
                                         }
 
                                         final cartItem = CartItem(
                                           id: widget.data.id,
                                           name: widget.data.name,
-                                          price: double.parse(
-                                            widget.data.price,
-                                          ),
+                                          price: effectivePrice,
                                           image: widget.data.image,
                                           quantity: 1,
                                         );
-                                        Provider.of<CartProvider>(
-                                          context,
-                                          listen: false,
-                                        ).addToCart(
-                                          cartItem,
-                                          _selectedQuantity,
-                                        );
+                                        Provider.of<CartProvider>(context, listen: false).addToCart(cartItem, _selectedQuantity);
 
                                         // Mostrar el SnackBar después de agregar el producto
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
+                                        ScaffoldMessenger.of(context).showSnackBar(
                                           SnackBar(
-                                            content: Text(
-                                              "${widget.data.name} añadido al carrito",
-                                            ),
-                                            duration: const Duration(
-                                              seconds: 2,
-                                            ),
+                                            content: Text("${widget.data.name} añadido al carrito"),
+                                            duration: const Duration(seconds: 2),
                                           ),
                                         );
                                       },
-                                      icon: const Icon(
-                                        Icons.shopping_basket_outlined,
-                                        color: Colors.white,
-                                        size: 28,
-                                      ),
+                                      icon: const Icon(Icons.shopping_basket_outlined, color: Colors.white, size: 28),
                                       label: Padding(
                                         padding: const EdgeInsets.all(8.0),
-                                        child: const Text(
-                                          'Añadir',
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 18,
-                                          ),
-                                        ),
+                                        child: const Text('Añadir', style: TextStyle(color: Colors.white, fontSize: 18)),
                                       ),
                                     ),
                                   ),
@@ -528,68 +411,37 @@ class ProductDetailState extends State<ProductDetail> {
                                   Expanded(
                                     child: ElevatedButton(
                                       onPressed: () async {
-                                        String nombreProducto =
-                                            widget.data.name;
+                                        String nombreProducto = widget.data.name;
                                         // String enlaceProducto = widget.data.permalink;
                                         String mensaje =
                                             "Hola, estoy interesado en este producto: $nombreProducto. Cantidad: $_selectedQuantity ";
                                         // Generar la URL para WhatsApp
-                                        Uri url = Uri.parse(
-                                          "https://wa.me/595961736520?text=${Uri.encodeComponent(mensaje)}",
-                                        );
+                                        Uri url = Uri.parse("https://wa.me/595961736520?text=${Uri.encodeComponent(mensaje)}");
                                         // Verificar si la URL se puede abrir
                                         if (await canLaunchUrl(url)) {
-                                          await launchUrl(
-                                            url,
-                                            mode:
-                                                LaunchMode.externalApplication,
-                                          );
+                                          await launchUrl(url, mode: LaunchMode.externalApplication);
                                         } else {
                                           if (mounted) {
                                             ScaffoldMessenger.of(
                                               context,
-                                            ).showSnackBar(
-                                              const SnackBar(
-                                                content: Text(
-                                                  'No se pudo abrir WhatsApp',
-                                                ),
-                                              ),
-                                            );
+                                            ).showSnackBar(const SnackBar(content: Text('No se pudo abrir WhatsApp')));
                                           }
                                         }
                                       },
                                       style: ElevatedButton.styleFrom(
                                         elevation: 0,
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius: BorderRadius.circular(
-                                            14,
-                                          ),
-                                        ),
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 6,
-                                        ),
+                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                                        padding: const EdgeInsets.symmetric(vertical: 6),
                                         backgroundColor: Colors.green,
                                       ),
                                       child: const Padding(
                                         padding: EdgeInsets.all(10),
                                         child: Row(
-                                          mainAxisSize:
-                                              MainAxisSize
-                                                  .min, // Ajusta el tamaño al contenido
+                                          mainAxisSize: MainAxisSize.min, // Ajusta el tamaño al contenido
                                           children: [
-                                            Text(
-                                              'Pedir por WhatsApp',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 14,
-                                              ),
-                                            ),
+                                            Text('Pedir por WhatsApp', style: TextStyle(color: Colors.white, fontSize: 14)),
                                             SizedBox(width: 10),
-                                            FaIcon(
-                                              FontAwesomeIcons.whatsapp,
-                                              color: Colors.white,
-                                              size: 26,
-                                            ),
+                                            FaIcon(FontAwesomeIcons.whatsapp, color: Colors.white, size: 26),
                                           ],
                                         ),
                                       ),
@@ -616,12 +468,7 @@ class ProductDetailState extends State<ProductDetail> {
     return Center(
       child: GestureDetector(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => FullscreenImage(imageUrl: imagePath),
-            ),
-          );
+          Navigator.push(context, MaterialPageRoute(builder: (context) => FullscreenImage(imageUrl: imagePath)));
         },
         child: Image.network(imagePath),
       ),
@@ -637,24 +484,13 @@ class ProductDetailState extends State<ProductDetail> {
         height: 60,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
-          border: Border.all(
-            color:
-                _currentIndex == index
-                    ? AppColors.blueAcua
-                    : const Color.fromARGB(255, 219, 219, 219),
-
-            width: 2,
-          ),
+          border: Border.all(color: _currentIndex == index ? AppColors.blueAcua : const Color.fromARGB(255, 219, 219, 219), width: 2),
           // shape: BoxShape.circle,
           color: _currentIndex == index ? Colors.white : Colors.white,
         ),
         child: Padding(
           padding: const EdgeInsets.all(4),
-          child: Opacity(
-            opacity: _currentIndex == index ? 1.0 : 0.5,
-
-            child: Image.network(imagePath),
-          ),
+          child: Opacity(opacity: _currentIndex == index ? 1.0 : 0.5, child: Image.network(imagePath)),
         ),
       ),
     );
@@ -677,9 +513,7 @@ class QuantityFieldState extends State<QuantityField> {
     if (mounted) {
       setState(() {
         _quantity++;
-        widget.onQuantityChanged(
-          _quantity,
-        ); // Llama al callback con la nueva cantidad
+        widget.onQuantityChanged(_quantity); // Llama al callback con la nueva cantidad
       });
     }
   }
@@ -689,9 +523,7 @@ class QuantityFieldState extends State<QuantityField> {
       setState(() {
         if (_quantity > 1) {
           _quantity--;
-          widget.onQuantityChanged(
-            _quantity,
-          ); // Llama al callback con la nueva cantidad
+          widget.onQuantityChanged(_quantity); // Llama al callback con la nueva cantidad
         }
       });
     }
@@ -702,22 +534,9 @@ class QuantityFieldState extends State<QuantityField> {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        IconButton(
-          onPressed: _decrement,
-          icon: const Icon(Icons.remove_circle_outline_rounded, size: 36),
-        ),
-        SizedBox(
-          width: 30,
-          child: Center(
-            child: Text('$_quantity', style: const TextStyle(fontSize: 20)),
-          ),
-        ),
-        IconButton(
-          onPressed: _increment,
-          icon: Stack(
-            children: [const Icon(Icons.add_circle_outline_rounded, size: 36)],
-          ),
-        ),
+        IconButton(onPressed: _decrement, icon: const Icon(Icons.remove_circle_outline_rounded, size: 36)),
+        SizedBox(width: 30, child: Center(child: Text('$_quantity', style: const TextStyle(fontSize: 20)))),
+        IconButton(onPressed: _increment, icon: Stack(children: [const Icon(Icons.add_circle_outline_rounded, size: 36)])),
       ],
     );
   }

@@ -30,10 +30,7 @@ class _AddressScreenState extends State<AddressScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Mis Direcciones"),
-        backgroundColor: Colors.blueAccent,
-      ),
+      appBar: AppBar(title: const Text("Mis Direcciones"), backgroundColor: Colors.blueAccent),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -45,26 +42,12 @@ class _AddressScreenState extends State<AddressScreen> {
               children: [
                 Expanded(
                   child: ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.blueDark,
-                    ),
+                    style: ElevatedButton.styleFrom(backgroundColor: AppColors.blueDark),
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const AddAddressScreen(),
-                        ),
-                      );
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const AddAddressScreen()));
                     },
-                    icon: const Icon(
-                      Icons.add_circle_outline,
-                      size: 24,
-                      color: AppColors.white,
-                    ),
-                    label: const Text(
-                      'Agregar nueva dirección',
-                      style: TextStyle(color: AppColors.white, fontSize: 16),
-                    ),
+                    icon: const Icon(Icons.add_circle_outline, size: 24, color: AppColors.white),
+                    label: const Text('Agregar nueva dirección', style: TextStyle(color: AppColors.white, fontSize: 16)),
                   ),
                 ),
               ],
@@ -79,9 +62,7 @@ class _AddressScreenState extends State<AddressScreen> {
                   } else if (snapshot.hasError) {
                     return Center(child: Text("Error: ${snapshot.error}"));
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Center(
-                      child: Text("No tienes direcciones guardadas"),
-                    );
+                    return const Center(child: Text("No tienes direcciones guardadas"));
                   }
 
                   final ubicaciones = snapshot.data!;
@@ -92,22 +73,11 @@ class _AddressScreenState extends State<AddressScreen> {
                       final ubicacion = ubicaciones[index];
 
                       return Card(
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 6,
-                        ),
+                        margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         child: ListTile(
-                          leading: const Icon(
-                            Icons.location_on,
-                            color: Colors.blue,
-                          ),
-                          title: Text(
-                            ubicacion.nombreUbicacion,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: Text(
-                            "${ubicacion.callePrincipal}, ${ubicacion.numeracion}",
-                          ),
+                          leading: const Icon(Icons.location_on, color: Colors.blue),
+                          title: Text(ubicacion.nombreUbicacion, style: const TextStyle(fontWeight: FontWeight.bold)),
+                          subtitle: Text("${ubicacion.callePrincipal}, ${ubicacion.numeracion}"),
                           trailing: IconButton(
                             icon: const Icon(Icons.delete, color: Colors.red),
                             onPressed: () {
@@ -133,15 +103,11 @@ class _AddressScreenState extends State<AddressScreen> {
       builder: (BuildContext dialogContext) {
         return AlertDialog(
           title: const Text("Confirmar eliminación"),
-          content: Text(
-            "¿Estás seguro de que quieres eliminar la ubicación '${ubicacion.nombreUbicacion}'?",
-          ),
+          content: Text("¿Estás seguro de que quieres eliminar la ubicación '${ubicacion.nombreUbicacion}'?"),
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(
-                  dialogContext,
-                ).pop(); // Cerrar ventana sin eliminar
+                Navigator.of(dialogContext).pop(); // Cerrar ventana sin eliminar
               },
               child: const Text("Cancelar"),
             ),
@@ -153,11 +119,7 @@ class _AddressScreenState extends State<AddressScreen> {
                 // ignore: use_build_context_synchronously
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text(
-                      eliminado
-                          ? "Ubicación eliminada correctamente."
-                          : "Error al eliminar la ubicación.",
-                    ),
+                    content: Text(eliminado ? "Ubicación eliminada correctamente." : "Error al eliminar la ubicación."),
                     duration: const Duration(seconds: 2),
                   ),
                 );
@@ -166,10 +128,7 @@ class _AddressScreenState extends State<AddressScreen> {
                   actualizarLista(); // Recargar lista si se eliminó
                 }
               },
-              child: const Text(
-                "Eliminar",
-                style: TextStyle(color: Colors.red),
-              ),
+              child: const Text("Eliminar", style: TextStyle(color: Colors.red)),
             ),
           ],
         );

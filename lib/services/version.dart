@@ -9,9 +9,7 @@ Future<String> getAppVersion() async {
 }
 
 Future<Map<String, dynamic>> getLatestVersion() async {
-  final response = await http.get(
-    Uri.parse("https://farma.staweno.com/version.json"),
-  );
+  final response = await http.get(Uri.parse("https://farma.staweno.com/version.json"));
   if (response.statusCode == 200) {
     return jsonDecode(response.body);
   } else {

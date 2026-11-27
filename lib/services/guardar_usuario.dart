@@ -7,8 +7,7 @@ Future<void> guardarUsuarioEnMySQL() async {
   User? user = FirebaseAuth.instance.currentUser;
 
   if (user != null) {
-    String apiUrl =
-        "https://farma.staweno.com/register_user.php"; // Cambia por la URL de tu servidor
+    String apiUrl = "https://farma.staweno.com/register_user.php"; // Cambia por la URL de tu servidor
     Map<String, String> userData = {
       "name": user.displayName ?? "",
       "last_name": "Apellido ejemplo", // Puedes pedir al usuario que lo ingrese
@@ -18,11 +17,7 @@ Future<void> guardarUsuarioEnMySQL() async {
       "date_birth": "1990-01-01", // Puedes cambiarlo según el usuario
     };
 
-    var response = await http.post(
-      Uri.parse(apiUrl),
-      body: jsonEncode(userData),
-      headers: {"Content-Type": "application/json"},
-    );
+    var response = await http.post(Uri.parse(apiUrl), body: jsonEncode(userData), headers: {"Content-Type": "application/json"});
 
     if (response.statusCode == 200) {
       print("Respuesta del servidor: ${response.body}");

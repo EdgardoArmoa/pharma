@@ -15,10 +15,7 @@ class NewFloatingActionButton extends StatelessWidget {
 
     return FloatingActionButton(
       onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const CartScreenView()),
-        );
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const CartScreenView()));
       },
       backgroundColor: bgColor,
       shape: const CircleBorder(),
@@ -40,24 +37,12 @@ class NewFloatingActionButton extends StatelessWidget {
                   right: -10,
                   child: Container(
                     padding: const EdgeInsets.all(2),
-                    constraints: const BoxConstraints(
-                      minWidth: 18,
-                      minHeight: 18,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
-                      border: Border.all(color: bgColor, width: 0.0),
-                    ),
+                    constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
+                    decoration: BoxDecoration(color: Colors.red, shape: BoxShape.circle, border: Border.all(color: bgColor, width: 0.0)),
                     child: Center(
                       child: Text(
                         itemCount.toString(),
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          height: 1.0,
-                        ),
+                        style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold, height: 1.0),
                       ),
                     ),
                   ),

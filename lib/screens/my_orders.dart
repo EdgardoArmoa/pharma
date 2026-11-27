@@ -34,10 +34,7 @@ class _MyOrdersState extends State<MyOrders> {
       appBar: AppBar(title: const Text("Mis pedidos")),
       body: Container(
         decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
           color: Color.fromARGB(255, 255, 255, 255),
         ),
         child: Padding(
@@ -63,10 +60,7 @@ class _MyOrdersState extends State<MyOrders> {
                             child: Text(
                               textAlign: TextAlign.center,
                               (order.status),
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 8,
-                              ),
+                              style: const TextStyle(color: Colors.white, fontSize: 8),
                             ),
                           ),
                         ),
@@ -81,28 +75,18 @@ class _MyOrdersState extends State<MyOrders> {
                               height: 26,
                               decoration: BoxDecoration(
                                 color: getStatusColor(order.status),
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(14),
-                                ),
+                                borderRadius: const BorderRadius.all(Radius.circular(14)),
                               ),
                               child: Padding(
                                 padding: const EdgeInsets.all(4),
                                 child: Text(
                                   textAlign: TextAlign.center,
                                   (order.status),
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 8,
-                                  ),
+                                  style: const TextStyle(color: Colors.white, fontSize: 8),
                                 ),
                               ),
                             ),
-                            title: Text(
-                              'Pedido #${order.id}',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+                            title: Text('Pedido #${order.id}', style: const TextStyle(fontWeight: FontWeight.w600)),
                             subtitle: Text(
                               '${order.createdAt}\nTotal:  ₲.${numberFormat(order.total.toString())}',
                               style: const TextStyle(fontSize: 12),

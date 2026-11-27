@@ -51,10 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
       if (imagen != null) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           showPromoBanner(context);
-          prefs.setBool(
-            'bannerShown',
-            true,
-          ); // Guarda que el banner ha sido mostrado
+          prefs.setBool('bannerShown', true); // Guarda que el banner ha sido mostrado
         });
       }
     }
@@ -72,14 +69,8 @@ class _MyHomePageState extends State<MyHomePage> {
         drawer: NewDrawer(),
         body: Container(
           decoration: BoxDecoration(
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
-            color:
-                Theme.of(context).brightness == Brightness.dark
-                    ? AppColors.blueBlak
-                    : Colors.white,
+            borderRadius: const BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+            color: Theme.of(context).brightness == Brightness.dark ? AppColors.blueBlak : Colors.white,
           ),
 
           child: Padding(
@@ -97,17 +88,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         builder: (context, featured) {
                           if (featured.hasData) {
                             if (featured.data!.isEmpty) {
-                              return const Center(
-                                child: Text("0 Banners disponibles"),
-                              );
+                              return const Center(child: Text("0 Banners disponibles"));
                             }
                             return Container(
                               width: double.infinity,
-                              color:
-                                  Theme.of(context).brightness ==
-                                          Brightness.dark
-                                      ? AppColors.blueBlak
-                                      : Colors.white,
+                              color: Theme.of(context).brightness == Brightness.dark ? AppColors.blueBlak : Colors.white,
                               child: CarouselSlider.builder(
                                 itemCount: featured.data!.length,
                                 options: CarouselOptions(
@@ -122,23 +107,16 @@ class _MyHomePageState extends State<MyHomePage> {
                                     onTap: () {},
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(10),
-                                      child: Image.network(
-                                        featured.data![i],
-                                        fit: BoxFit.cover,
-                                      ),
+                                      child: Image.network(featured.data![i], fit: BoxFit.cover),
                                     ),
                                   );
                                 },
                               ),
                             );
                           } else if (featured.hasError) {
-                            return Center(
-                              child: Text(featured.error.toString()),
-                            );
+                            return Center(child: Text(featured.error.toString()));
                           } else {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
+                            return const Center(child: CircularProgressIndicator());
                           }
                         },
                       ),
@@ -150,13 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
                     child: Align(
                       alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Categorías",
-                        style: GoogleFonts.quicksand(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
+                      child: Text("Categorías", style: GoogleFonts.quicksand(fontSize: 14, fontWeight: FontWeight.w800)),
                     ),
                   ),
                 ),
@@ -173,9 +145,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           if (snapshot.hasData) {
                             final categories = snapshot.data!;
                             if (categories.isEmpty) {
-                              return const Center(
-                                child: Text("0 Categoría a mostrar"),
-                              );
+                              return const Center(child: Text("0 Categoría a mostrar"));
                             }
                             return ListView.builder(
                               scrollDirection: Axis.horizontal,
@@ -190,13 +160,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     onTap: () {
                                       Navigator.push(
                                         context,
-                                        MaterialPageRoute(
-                                          builder:
-                                              (context) => ListCategoria(
-                                                int.parse(cat.id),
-                                                cat.nombre,
-                                              ),
-                                        ),
+                                        MaterialPageRoute(builder: (context) => ListCategoria(int.parse(cat.id), cat.nombre)),
                                       );
                                     },
                                   ),
@@ -204,13 +168,9 @@ class _MyHomePageState extends State<MyHomePage> {
                               },
                             );
                           } else if (snapshot.hasError) {
-                            return Center(
-                              child: Text(snapshot.error.toString()),
-                            );
+                            return Center(child: Text(snapshot.error.toString()));
                           } else {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
+                            return const Center(child: CircularProgressIndicator());
                           }
                         },
                       ),
@@ -224,15 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Ofertas",
-                          style: GoogleFonts.quicksand(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      ],
+                      children: [Text("Ofertas", style: GoogleFonts.quicksand(fontSize: 14, fontWeight: FontWeight.w800))],
                     ),
                   ),
                 ),
@@ -244,13 +196,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "Con cupones de descuentos ",
-                          style: GoogleFonts.quicksand(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                        Text("Con cupones de descuentos ", style: GoogleFonts.quicksand(fontSize: 16, fontWeight: FontWeight.w600)),
                       ],
                     ),
                   ),
@@ -264,15 +210,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     padding: const EdgeInsets.fromLTRB(16, 16, 16, 6),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          "Destacados",
-                          style: GoogleFonts.quicksand(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
+                      children: [Text("Destacados", style: GoogleFonts.quicksand(fontSize: 16, fontWeight: FontWeight.w600))],
                     ),
                   ),
                 ),
@@ -285,28 +223,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          " Novedades",
-                          style: GoogleFonts.quicksand(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                        Text(" Novedades", style: GoogleFonts.quicksand(fontSize: 16, fontWeight: FontWeight.w600)),
                         InkWell(
-                          onTap:
-                              () => Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (_) => const ListProductAll(),
-                                ),
-                              ),
-                          child: Text(
-                            "Ver más",
-                            style: GoogleFonts.quicksand(
-                              fontSize: 11,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
+                          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => const ListProductAll())),
+                          child: Text("Ver más", style: GoogleFonts.quicksand(fontSize: 11, fontWeight: FontWeight.w400)),
                         ),
                       ],
                     ),
@@ -319,15 +239,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Marcas TOP",
-                          style: GoogleFonts.quicksand(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ],
+                      children: [Text("Marcas TOP", style: GoogleFonts.quicksand(fontSize: 16, fontWeight: FontWeight.w600))],
                     ),
                   ),
                 ),

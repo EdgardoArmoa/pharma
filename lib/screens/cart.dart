@@ -39,9 +39,7 @@ class _CartScreenViewState extends State<CartScreenView> {
   Future<void> cargarCupones() async {
     final userId = Provider.of<AuthProvider>(context, listen: false).userId;
     final response = await http.post(
-      Uri.parse(
-        'https://farma.staweno.com/cupones/cupones_acumulados_cliente.php',
-      ),
+      Uri.parse('https://farma.staweno.com/cupones/cupones_acumulados_cliente.php'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'cliente_id': userId}),
     );
@@ -50,10 +48,7 @@ class _CartScreenViewState extends State<CartScreenView> {
     // print('🧾 Cupones recibidos: ${jsonEncode(data)}');
     if (data['success'] == true) {
       setState(() {
-        cuponesDelCliente =
-            (data['cupones'] as List)
-                .map((c) => CuponDisponible.fromJson(c))
-                .toList();
+        cuponesDelCliente = (data['cupones'] as List).map((c) => CuponDisponible.fromJson(c)).toList();
       });
     } else {
       print('Error: ${data['mensaje']}');
@@ -79,10 +74,7 @@ class _CartScreenViewState extends State<CartScreenView> {
   void calcularTotalOriginal() {
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
     final List<CartItem> cartItems = cartProvider.cartItems;
-    totalOriginal = cartItems.fold(
-      0.0,
-      (sum, item) => sum + item.price * item.quantity,
-    );
+    totalOriginal = cartItems.fold(0.0, (sum, item) => sum + item.price * item.quantity);
     totalConDescuento = totalOriginal;
   }
 
@@ -103,17 +95,11 @@ class _CartScreenViewState extends State<CartScreenView> {
           title: Text("Actualiza tu perfil"),
           content: Text("Falta completar: ${datosFaltantes.join(", ")}"),
           actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text("Cerrar"),
-            ),
+            TextButton(onPressed: () => Navigator.pop(context), child: Text("Cerrar")),
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ProfileScreen()),
-                );
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
               },
               child: Text("Actualizar"),
             ),
@@ -153,10 +139,7 @@ class _CartScreenViewState extends State<CartScreenView> {
         appBar: AppBar(title: const Text("Mi Carrito")),
         body: Container(
           decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
             color: Color.fromARGB(255, 255, 255, 255),
           ),
           child:
@@ -165,15 +148,8 @@ class _CartScreenViewState extends State<CartScreenView> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
-                          Icons.sentiment_very_dissatisfied,
-                          size: 90,
-                          color: Colors.blueGrey,
-                        ),
-                        Text(
-                          "¡Tu carrito está vacío!",
-                          style: TextStyle(fontSize: 18),
-                        ),
+                        Icon(Icons.sentiment_very_dissatisfied, size: 90, color: Colors.blueGrey),
+                        Text("¡Tu carrito está vacío!", style: TextStyle(fontSize: 18)),
                       ],
                     ),
                   )
@@ -185,47 +161,23 @@ class _CartScreenViewState extends State<CartScreenView> {
                           itemCount: cartItems.length,
                           itemBuilder: (context, index) {
                             final CartItem item = cartItems[index];
-                            final cuponProvider = Provider.of<CuponProvider>(
-                              context,
-                            );
-                            final cupon = cuponProvider.obtenerCuponDeProducto(
-                              item.id,
-                            );
+                            final cuponProvider = Provider.of<CuponProvider>(context);
+                            final cupon = cuponProvider.obtenerCuponDeProducto(item.id);
 
                             return Dismissible(
                               key: ValueKey(item.id),
-                              direction:
-                                  DismissDirection
-                                      .endToStart, // Deslizar de derecha a izquierda
+                              direction: DismissDirection.endToStart, // Deslizar de derecha a izquierda
                               background: Container(
                                 alignment: Alignment.centerRight,
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 20,
-                                ),
-                                margin: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 4,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.red.shade600,
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
+                                padding: const EdgeInsets.symmetric(horizontal: 20),
+                                margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                                decoration: BoxDecoration(color: Colors.red.shade600, borderRadius: BorderRadius.circular(8.0)),
                                 child: const Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Icon(
-                                      Icons.delete_outline,
-                                      color: Colors.white,
-                                      size: 26,
-                                    ),
+                                    Icon(Icons.delete_outline, color: Colors.white, size: 26),
                                     SizedBox(width: 6),
-                                    Text(
-                                      'Eliminar',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
+                                    Text('Eliminar', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                                   ],
                                 ),
                               ),
@@ -244,69 +196,46 @@ class _CartScreenViewState extends State<CartScreenView> {
                                 ScaffoldMessenger.of(context).clearSnackBars();
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
-                                    content: Text(
-                                      '${removedItem.name} eliminado del carrito',
-                                    ),
+                                    content: Text('${removedItem.name} eliminado del carrito'),
                                     duration: const Duration(seconds: 4),
                                     action: SnackBarAction(
                                       label: 'Deshacer',
                                       onPressed: () {
-                                        cartProvider.addToCart(
-                                          removedItem,
-                                          removedItem.quantity,
-                                        );
+                                        cartProvider.addToCart(removedItem, removedItem.quantity);
                                       },
                                     ),
                                   ),
                                 );
                               },
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 10,
-                                  vertical: 4,
-                                ),
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                                 child: Card(
                                   color: Colors.white,
                                   elevation: 0,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                  ),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
                                   child: Row(
                                     children: [
                                       // Imagen del producto con bordes redondeados
                                       ClipRRect(
-                                        borderRadius: BorderRadius.circular(
-                                          8.0,
-                                        ),
-                                        child: Image.network(
-                                          item.image,
-                                          width: 80,
-                                          height: 80,
-                                          fit: BoxFit.cover,
-                                        ),
+                                        borderRadius: BorderRadius.circular(8.0),
+                                        child: Image.network(item.image, width: 80, height: 80, fit: BoxFit.cover),
                                       ),
                                       const SizedBox(width: 12),
 
                                       // Información del producto
                                       Expanded(
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               item.name,
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                             const SizedBox(height: 8),
 
                                             Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
                                                 Text(
                                                   "₲ ${numeroFormat.format(item.price)}",
@@ -318,19 +247,8 @@ class _CartScreenViewState extends State<CartScreenView> {
                                                 ),
                                                 if (cupon != null)
                                                   Padding(
-                                                    padding:
-                                                        const EdgeInsets.fromLTRB(
-                                                          0,
-                                                          0,
-                                                          10,
-                                                          0,
-                                                        ),
-                                                    child: SizedBox(
-                                                      width: 40,
-                                                      child: Image.asset(
-                                                        'assets/cupon.png',
-                                                      ),
-                                                    ),
+                                                    padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+                                                    child: SizedBox(width: 40, child: Image.asset('assets/cupon.png')),
                                                   ),
                                               ],
                                             ),
@@ -342,17 +260,10 @@ class _CartScreenViewState extends State<CartScreenView> {
                                       Container(
                                         decoration: BoxDecoration(
                                           color: Colors.white,
-                                          borderRadius: BorderRadius.circular(
-                                            22,
-                                          ),
+                                          borderRadius: BorderRadius.circular(22),
                                           boxShadow: const [
                                             BoxShadow(
-                                              color: Color.fromARGB(
-                                                30,
-                                                0,
-                                                0,
-                                                0,
-                                              ),
+                                              color: Color.fromARGB(30, 0, 0, 0),
                                               spreadRadius: 1,
                                               blurRadius: 4,
                                               offset: Offset(2, 2),
@@ -362,37 +273,19 @@ class _CartScreenViewState extends State<CartScreenView> {
                                         child: Column(
                                           children: [
                                             IconButton(
-                                              icon: const Icon(
-                                                Icons.add,
-                                                size: 18,
-                                              ),
+                                              icon: const Icon(Icons.add, size: 18),
                                               onPressed: () {
                                                 cartProvider.addToCart(item, 1);
                                               },
                                             ),
-                                            Text(
-                                              "${item.quantity}",
-                                              style: const TextStyle(
-                                                fontSize: 14,
-                                              ),
-                                            ),
+                                            Text("${item.quantity}", style: const TextStyle(fontSize: 14)),
                                             IconButton(
-                                              icon: Icon(
-                                                item.quantity > 1
-                                                    ? Icons.remove
-                                                    : Icons.delete,
-                                                size: 18,
-                                              ),
+                                              icon: Icon(item.quantity > 1 ? Icons.remove : Icons.delete, size: 18),
                                               onPressed: () {
                                                 if (item.quantity > 1) {
-                                                  cartProvider.addToCart(
-                                                    item,
-                                                    -1,
-                                                  );
+                                                  cartProvider.addToCart(item, -1);
                                                 } else {
-                                                  cartProvider.removeFromCart(
-                                                    item.id,
-                                                  );
+                                                  cartProvider.removeFromCart(item.id);
                                                 }
                                               },
                                             ),
@@ -417,84 +310,52 @@ class _CartScreenViewState extends State<CartScreenView> {
                                   ? AppColors.blueBlak
                                   : const Color.fromARGB(255, 250, 250, 250),
 
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(20),
-                            topRight: Radius.circular(20),
-                          ),
-                          border: const Border(
-                            top: BorderSide(
-                              color: Color.fromARGB(255, 200, 200, 200),
-                              width: 1,
-                            ),
-                          ),
+                          borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                          border: const Border(top: BorderSide(color: Color.fromARGB(255, 200, 200, 200), width: 1)),
                         ),
                         child: Column(
                           children: [
                             if (cuponesDelCliente.isNotEmpty)
                               Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 4,
-                                ),
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                                 decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: Colors.grey.shade400,
-                                  ),
+                                  border: Border.all(color: Colors.grey.shade400),
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Row(
                                   children: [
-                                    Icon(
-                                      Icons.card_giftcard,
-                                      color: Colors.deepPurple,
-                                    ),
+                                    Icon(Icons.card_giftcard, color: Colors.deepPurple),
                                     const SizedBox(width: 10),
                                     Expanded(
                                       child: DropdownButtonHideUnderline(
                                         child: DropdownButton<CuponDisponible>(
                                           value: cuponSeleccionado,
-                                          hint: const Text(
-                                            'Elegí un cupón para aplicar',
-                                            style: TextStyle(fontSize: 14),
-                                          ),
+                                          hint: const Text('Elegí un cupón para aplicar', style: TextStyle(fontSize: 14)),
                                           isExpanded: true,
-                                          icon: const Icon(
-                                            Icons.arrow_drop_down,
-                                          ),
+                                          icon: const Icon(Icons.arrow_drop_down),
                                           items:
                                               cuponesDelCliente.map((cupon) {
                                                 return DropdownMenuItem(
                                                   value: cupon,
                                                   child: Text(
                                                     '${cupon.description} | ${cupon.code} ',
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                      fontSize: 14,
-                                                    ),
+                                                    overflow: TextOverflow.ellipsis,
+                                                    style: TextStyle(fontSize: 14),
                                                   ),
                                                 );
                                               }).toList(),
                                           onChanged: (cuponElegido) {
                                             if (cuponElegido != null) {
-                                              final descuento =
-                                                  calcularDescuento(
-                                                    cupon: {
-                                                      'type': cuponElegido.type,
-                                                      'amount':
-                                                          cuponElegido.amount,
-                                                    },
-                                                    total: totalOriginal,
-                                                    cartItems:
-                                                        cartProvider.cartItems,
-                                                    context: context,
-                                                  );
+                                              final descuento = calcularDescuento(
+                                                cupon: {'type': cuponElegido.type, 'amount': cuponElegido.amount},
+                                                total: totalOriginal,
+                                                cartItems: cartProvider.cartItems,
+                                                context: context,
+                                              );
 
                                               setState(() {
-                                                cuponSeleccionado =
-                                                    cuponElegido;
-                                                totalConDescuento =
-                                                    totalOriginal - descuento;
+                                                cuponSeleccionado = cuponElegido;
+                                                totalConDescuento = totalOriginal - descuento;
                                               });
                                             }
                                           },
@@ -512,17 +373,9 @@ class _CartScreenViewState extends State<CartScreenView> {
                                           });
                                         },
                                         child: Container(
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey.shade200,
-                                            borderRadius: BorderRadius.circular(
-                                              8,
-                                            ),
-                                          ),
+                                          decoration: BoxDecoration(color: Colors.grey.shade200, borderRadius: BorderRadius.circular(8)),
                                           padding: const EdgeInsets.all(6),
-                                          child: const Icon(
-                                            Icons.close,
-                                            size: 20,
-                                          ),
+                                          child: const Icon(Icons.close, size: 20),
                                         ),
                                       ),
                                   ],
@@ -532,37 +385,22 @@ class _CartScreenViewState extends State<CartScreenView> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                const Text(
-                                  "Subtotal:",
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                                Text(
-                                  "₲${numberFormat(subtotal.toStringAsFixed(0).toString())}",
-                                  style: const TextStyle(fontSize: 16),
-                                ),
+                                const Text("Subtotal:", style: TextStyle(fontSize: 16)),
+                                Text("₲${numberFormat(subtotal.toStringAsFixed(0).toString())}", style: const TextStyle(fontSize: 16)),
                               ],
                             ),
                             const SizedBox(height: 8),
                             if (cuponSeleccionado != null)
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   const Text(
                                     "Descuento aplicado:",
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.green,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                    style: TextStyle(fontSize: 16, color: Colors.green, fontWeight: FontWeight.bold),
                                   ),
                                   Text(
                                     "- ₲${numberFormat((totalOriginal - totalConDescuento).toStringAsFixed(0))}",
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.green,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                    style: const TextStyle(fontSize: 16, color: Colors.green, fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ),
@@ -573,28 +411,13 @@ class _CartScreenViewState extends State<CartScreenView> {
                                 (cuponSeleccionado != null)
                                     ? Text(
                                       "Total con descuento:",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.red[900],
-                                      ),
+                                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red[900]),
                                     )
-                                    : Text(
-                                      "Total:",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.red[900],
-                                      ),
-                                    ),
+                                    : Text("Total:", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red[900])),
 
                                 Text(
                                   "₲. ${numberFormat(totalConDescuento.toStringAsFixed(0).toString())}",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.red[900],
-                                  ),
+                                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.red[900]),
                                 ),
                               ],
                             ),
@@ -604,38 +427,23 @@ class _CartScreenViewState extends State<CartScreenView> {
 
                       // Botón para finalizar compra
                       Container(
-                        color:
-                            Theme.of(context).brightness == Brightness.dark
-                                ? AppColors.blueBlak
-                                : Colors.white,
+                        color: Theme.of(context).brightness == Brightness.dark ? AppColors.blueBlak : Colors.white,
                         width: double.infinity,
                         child: Padding(
                           padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
                           child: ElevatedButton.icon(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor:
-                                  Theme.of(context).brightness ==
-                                          Brightness.dark
-                                      ? Colors.white
-                                      : AppColors.blueDark,
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 12.0,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(24),
-                              ),
+                              backgroundColor: Theme.of(context).brightness == Brightness.dark ? Colors.white : AppColors.blueDark,
+                              padding: const EdgeInsets.symmetric(vertical: 12.0),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
                             ),
                             onPressed: () {
                               if (!authProvider.isAuthenticated) {
                                 // Mostrar mensaje con ScaffoldMessenger
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                    content: Text(
-                                      'Para enviar el pedido debes iniciar sesión',
-                                    ),
-                                    duration: Duration(
-                                      seconds: 2,
-                                    ), // Duración del mensaje
+                                    content: Text('Para enviar el pedido debes iniciar sesión'),
+                                    duration: Duration(seconds: 2), // Duración del mensaje
                                   ),
                                 );
 
@@ -649,24 +457,17 @@ class _CartScreenViewState extends State<CartScreenView> {
                                 );
                               } else {
                                 // Usuario logueado, proceder con la navegación
-                                final cuponProvider =
-                                    Provider.of<CuponProvider>(
-                                      context,
-                                      listen: false,
-                                    );
+                                final cuponProvider = Provider.of<CuponProvider>(context, listen: false);
 
                                 double? montoMinimoGlobal;
                                 for (final item in cartItems) {
-                                  final cupon = cuponProvider
-                                      .obtenerCuponDeProducto(item.id);
+                                  final cupon = cuponProvider.obtenerCuponDeProducto(item.id);
                                   if (cupon != null && cupon.minimo != null) {
-                                    if (montoMinimoGlobal == null ||
-                                        cupon.minimo! < montoMinimoGlobal) {
+                                    if (montoMinimoGlobal == null || cupon.minimo! < montoMinimoGlobal) {
                                       montoMinimoGlobal = cupon.minimo!;
                                     }
                                   }
-                                  final double montoMinimo =
-                                      montoMinimoGlobal ?? 0;
+                                  final double montoMinimo = montoMinimoGlobal ?? 0;
 
                                   if (totalOriginal >= montoMinimo) {
                                     // ✅ Acreditar cupones
@@ -674,9 +475,7 @@ class _CartScreenViewState extends State<CartScreenView> {
                                     // ❌ Mostrar advertencia al usuario
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                        content: Text(
-                                          '⚠️ La compra debe ser al menos ₲$montoMinimoGlobal para recibir cupones',
-                                        ),
+                                        content: Text('⚠️ La compra debe ser al menos ₲$montoMinimoGlobal para recibir cupones'),
                                         backgroundColor: Colors.orange,
                                       ),
                                     );
@@ -685,10 +484,7 @@ class _CartScreenViewState extends State<CartScreenView> {
                                 // Recorremos los productos y obtenemos los cupones asociados
                                 final cuponesSeleccionados =
                                     cartItems
-                                        .map(
-                                          (item) => cuponProvider
-                                              .obtenerCuponDeProducto(item.id),
-                                        )
+                                        .map((item) => cuponProvider.obtenerCuponDeProducto(item.id))
                                         .where((cupon) => cupon != null)
                                         .map((cupon) => cupon!.id)
                                         .toSet()
@@ -702,19 +498,11 @@ class _CartScreenViewState extends State<CartScreenView> {
                                           cartItems: cartItems,
                                           totalAmount: totalOriginal,
                                           totalConDescuento: totalConDescuento,
-                                          cuponesParaGenerar:
-                                              cuponesParaGenerar,
-                                          cuponesSeleccionados:
-                                              cuponesSeleccionados,
-                                          freeShipping:
-                                              cuponSeleccionado?.freeShipping ??
-                                              0,
-                                          cuponSeleccionado:
-                                              cuponSeleccionado
-                                                  ?.clienteCuponId ??
-                                              0,
-                                          montoMinimoCupon:
-                                              montoMinimoGlobal ?? 0,
+                                          cuponesParaGenerar: cuponesParaGenerar,
+                                          cuponesSeleccionados: cuponesSeleccionados,
+                                          freeShipping: cuponSeleccionado?.freeShipping ?? 0,
+                                          cuponSeleccionado: cuponSeleccionado?.clienteCuponId ?? 0,
+                                          montoMinimoCupon: montoMinimoGlobal ?? 0,
                                         ),
                                   ),
                                 );
@@ -723,22 +511,14 @@ class _CartScreenViewState extends State<CartScreenView> {
                             iconAlignment: IconAlignment.end,
                             icon: Icon(
                               Icons.arrow_forward_ios_rounded,
-                              color:
-                                  Theme.of(context).brightness ==
-                                          Brightness.dark
-                                      ? AppColors.blueBlak
-                                      : Colors.white,
+                              color: Theme.of(context).brightness == Brightness.dark ? AppColors.blueBlak : Colors.white,
                             ),
 
                             label: Text(
                               "Confirmar Pedido",
                               style: TextStyle(
                                 fontSize: 18,
-                                color:
-                                    Theme.of(context).brightness ==
-                                            Brightness.dark
-                                        ? AppColors.blueBlak
-                                        : Colors.white,
+                                color: Theme.of(context).brightness == Brightness.dark ? AppColors.blueBlak : Colors.white,
                               ),
                             ),
                           ),

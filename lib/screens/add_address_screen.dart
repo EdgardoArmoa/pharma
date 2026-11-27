@@ -27,19 +27,12 @@ class AddAddressScreenState extends State<AddAddressScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.blueAcua,
-      appBar: AppBar(
-        backgroundColor: AppColors.blueAcua,
-        surfaceTintColor: Colors.transparent,
-        title: const Text("Agregar direcciones"),
-      ),
+      appBar: AppBar(backgroundColor: AppColors.blueAcua, surfaceTintColor: Colors.transparent, title: const Text("Agregar direcciones")),
       body: SingleChildScrollView(
         child: Container(
           height: MediaQuery.of(context).size.height,
           decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-            ),
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
             color: Colors.white,
           ),
           child: Padding(
@@ -53,14 +46,10 @@ class AddAddressScreenState extends State<AddAddressScreen> {
                   controller: _nombreUbicacionController,
                   decoration: InputDecoration(
                     labelText: 'Nombre de Ubicación',
-                    prefixIcon: const Icon(
-                      Icons.person_2_outlined,
-                    ), // Icono a la izquierda
+                    prefixIcon: const Icon(Icons.person_2_outlined), // Icono a la izquierda
                     border: OutlineInputBorder(
                       // Borde para un aspecto más definido
-                      borderRadius: BorderRadius.circular(
-                        10.0,
-                      ), // Bordes redondeados
+                      borderRadius: BorderRadius.circular(10.0), // Bordes redondeados
                     ),
                   ),
                 ),
@@ -70,9 +59,7 @@ class AddAddressScreenState extends State<AddAddressScreen> {
                   controller: _numeracionController,
                   decoration: InputDecoration(
                     labelText: 'Número de Casa o Dpto.',
-                    prefixIcon: const Icon(
-                      Icons.home_outlined,
-                    ), // Icono a la izquierda
+                    prefixIcon: const Icon(Icons.home_outlined), // Icono a la izquierda
                     border: OutlineInputBorder(
                       // Borde para un aspecto más definido
                       borderRadius: BorderRadius.circular(10.0),
@@ -96,19 +83,14 @@ class AddAddressScreenState extends State<AddAddressScreen> {
                   value: ciudadSeleccionada,
                   items:
                       cities.map((ciudad) {
-                        return DropdownMenuItem<String>(
-                          value: ciudad['name'],
-                          child: Text(ciudad['name']!),
-                        );
+                        return DropdownMenuItem<String>(value: ciudad['name'], child: Text(ciudad['name']!));
                       }).toList(),
                   onChanged: (value) {
                     setState(() {
                       ciudadSeleccionada = value;
 
                       // Buscar el costo de envío de la ciudad seleccionada
-                      var selectedCity = cities.firstWhere(
-                        (ciudad) => ciudad['name'] == value,
-                      );
+                      var selectedCity = cities.firstWhere((ciudad) => ciudad['name'] == value);
                       shippingCost = int.parse(selectedCity['costoEnvio']!);
                     });
                   },
@@ -120,14 +102,10 @@ class AddAddressScreenState extends State<AddAddressScreen> {
                   controller: _calleController,
                   decoration: InputDecoration(
                     labelText: 'Calle principal y numero ',
-                    prefixIcon: const Icon(
-                      Icons.room_outlined,
-                    ), // Icono a la izquierda
+                    prefixIcon: const Icon(Icons.room_outlined), // Icono a la izquierda
                     border: OutlineInputBorder(
                       // Borde para un aspecto más definido
-                      borderRadius: BorderRadius.circular(
-                        10.0,
-                      ), // Bordes redondeados
+                      borderRadius: BorderRadius.circular(10.0), // Bordes redondeados
                     ),
                   ),
                 ),
@@ -138,30 +116,19 @@ class AddAddressScreenState extends State<AddAddressScreen> {
                   children: [
                     Expanded(
                       child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.grayLight,
-                        ),
+                        style: ElevatedButton.styleFrom(backgroundColor: AppColors.grayLight),
                         onPressed: () {
-                          if (ciudadSeleccionada != null &&
-                              _calleController.text.isNotEmpty) {
-                            final direccion =
-                                '$ciudadSeleccionada, ${_calleController.text}';
+                          if (ciudadSeleccionada != null && _calleController.text.isNotEmpty) {
+                            final direccion = '$ciudadSeleccionada, ${_calleController.text}';
 
                             _mostrarMapa(context, direccion);
                           } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Por favor completa los campos'),
-                              ),
-                            );
+                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Por favor completa los campos')));
                           }
                         },
                         child: const Padding(
                           padding: EdgeInsets.all(10),
-                          child: Text(
-                            'Ubicar en Mapa',
-                            style: TextStyle(color: Colors.white),
-                          ),
+                          child: Text('Ubicar en Mapa', style: TextStyle(color: Colors.white)),
                         ),
                       ),
                     ),
@@ -174,42 +141,31 @@ class AddAddressScreenState extends State<AddAddressScreen> {
                   children: [
                     Expanded(
                       child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppColors.blueDark,
-                        ),
+                        style: ElevatedButton.styleFrom(backgroundColor: AppColors.blueDark),
                         onPressed: () async {
                           if (_validarCampos()) {
                             try {
-                              UsuarioModel? usuario =
-                                  await obtenerUsuarioDesdeMySQL();
+                              UsuarioModel? usuario = await obtenerUsuarioDesdeMySQL();
                               int? userId = usuario?.id;
 
                               // Crear modelo `UbicacionModel` antes de enviarlo
                               final nuevaUbicacion = UbicacionModel(
                                 id: 0, // La DB asignará el ID automáticamente
-                                nombreUbicacion:
-                                    _nombreUbicacionController.text,
+                                nombreUbicacion: _nombreUbicacionController.text,
                                 callePrincipal: _calleController.text,
                                 numeracion: _numeracionController.text,
                                 ciudad: ciudadSeleccionada,
                                 costo: shippingCost, // Asegurar que es int
-                                latitud:
-                                    double.tryParse(latitud.toString()) ?? 0.0,
-                                longitud:
-                                    double.tryParse(longitud.toString()) ?? 0.0,
+                                latitud: double.tryParse(latitud.toString()) ?? 0.0,
+                                longitud: double.tryParse(longitud.toString()) ?? 0.0,
                                 userId: userId ?? 0,
                               );
 
-                              bool guardado = await PerfilService()
-                                  .crearUbicacion(nuevaUbicacion);
+                              bool guardado = await PerfilService().crearUbicacion(nuevaUbicacion);
 
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(
-                                  content: Text(
-                                    guardado
-                                        ? "Ubicación guardada exitosamente."
-                                        : "Error al guardar la ubicación.",
-                                  ),
+                                  content: Text(guardado ? "Ubicación guardada exitosamente." : "Error al guardar la ubicación."),
                                   duration: const Duration(seconds: 2),
                                 ),
                               );
@@ -220,25 +176,18 @@ class AddAddressScreenState extends State<AddAddressScreen> {
                                 Navigator.pushReplacement(
                                   // ignore: use_build_context_synchronously
                                   context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const AddressScreen(),
-                                  ),
+                                  MaterialPageRoute(builder: (context) => const AddressScreen()),
                                 );
                               }
                             } catch (e) {
                               // ignore: use_build_context_synchronously
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text("Error: $e")),
-                              );
+                              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Error: $e")));
                             }
                           }
                         },
                         child: const Padding(
                           padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                          child: Text(
-                            'Guardar dirección',
-                            style: TextStyle(color: Colors.white, fontSize: 18),
-                          ),
+                          child: Text('Guardar dirección', style: TextStyle(color: Colors.white, fontSize: 18)),
                         ),
                       ),
                     ),
@@ -259,9 +208,7 @@ class AddAddressScreenState extends State<AddAddressScreen> {
         _numeracionController.text.isEmpty ||
         latitud == null ||
         longitud == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Por favor completa todos los campos')),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Por favor completa todos los campos')));
       return false;
     }
     return true;

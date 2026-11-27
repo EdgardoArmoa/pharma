@@ -16,21 +16,15 @@ class PerfilService {
 
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
-      return jsonResponse["status"] ==
-          "success"; // Retorna `true` si se guardó correctamente
+      return jsonResponse["status"] == "success"; // Retorna `true` si se guardó correctamente
     }
     return false;
   }
 
   // Funcion Otener datos del Perfil
   Future<Map<String, dynamic>> obtenerDatosPerfil(String token) async {
-    final url = Uri.parse(
-      'https://piletasyjuguetes.com/wp-json/ubicaciones/v1/perfil',
-    );
-    final response = await http.get(
-      url,
-      headers: {'Authorization': 'Bearer $token'},
-    );
+    final url = Uri.parse('https://piletasyjuguetes.com/wp-json/ubicaciones/v1/perfil');
+    final response = await http.get(url, headers: {'Authorization': 'Bearer $token'});
 
     if (response.statusCode == 200) {
       return jsonDecode(response.body) as Map<String, dynamic>;

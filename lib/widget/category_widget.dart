@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CategoryCard extends StatelessWidget {
-  final String
-  imagePath; // Cambiamos IconData por String para la ruta de la imagen
+  final String imagePath; // Cambiamos IconData por String para la ruta de la imagen
   final String label;
   final VoidCallback? onTap;
 
@@ -30,9 +29,7 @@ class CategoryCard extends StatelessWidget {
                 imagePath, // Usa la ruta de la imagen
                 width: 65, // Puedes ajustar el ancho según necesites
                 height: 65, // Puedes ajustar la altura según necesites
-                fit:
-                    BoxFit
-                        .contain, // Cómo se ajustará la imagen dentro del espacio
+                fit: BoxFit.contain, // Cómo se ajustará la imagen dentro del espacio
               ),
             ),
             const SizedBox(height: 8.0),
@@ -42,11 +39,7 @@ class CategoryCard extends StatelessWidget {
               child: Text(
                 label,
                 textAlign: TextAlign.center,
-                style: GoogleFonts.quicksand(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 10,
-                  height: 1.2,
-                ),
+                style: GoogleFonts.quicksand(fontWeight: FontWeight.w600, fontSize: 10, height: 1.2),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),

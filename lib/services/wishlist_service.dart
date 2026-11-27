@@ -3,16 +3,10 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class WishlistService {
-  Future<void> saveWishlistToLocalStorage(
-    String userId,
-    List<WishlistItem> wishlistItems,
-  ) async {
+  Future<void> saveWishlistToLocalStorage(String userId, List<WishlistItem> wishlistItems) async {
     final prefs = await SharedPreferences.getInstance();
     final wishlistJson = wishlistItems.map((item) => item.toJson()).toList();
-    prefs.setString(
-      'wishlist_$userId',
-      json.encode(wishlistJson),
-    ); // Guardar usando el userId
+    prefs.setString('wishlist_$userId', json.encode(wishlistJson)); // Guardar usando el userId
   }
 
   Future<List<WishlistItem>> loadWishlistFromLocalStorage(String userId) async {
@@ -33,12 +27,7 @@ class WishlistItem {
   final String image;
   final double price;
 
-  WishlistItem({
-    required this.id,
-    required this.name,
-    required this.image,
-    required this.price,
-  });
+  WishlistItem({required this.id, required this.name, required this.image, required this.price});
 
   // Convertir a JSON para guardarlo localmente o enviarlo al servidor
   Map<String, dynamic> toJson() {
@@ -58,16 +47,10 @@ class WishlistItem {
 }
 
 // Gestionar almacenamiento local con Shared_Preferences
-Future<void> saveWishlistToLocalStorage(
-  String userId,
-  List<WishlistItem> wishlistItems,
-) async {
+Future<void> saveWishlistToLocalStorage(String userId, List<WishlistItem> wishlistItems) async {
   final prefs = await SharedPreferences.getInstance();
   final wishlistJson = wishlistItems.map((item) => item.toJson()).toList();
-  prefs.setString(
-    'wishlist_$userId',
-    json.encode(wishlistJson),
-  ); // Usar el userId recibido para guardar la lista
+  prefs.setString('wishlist_$userId', json.encode(wishlistJson)); // Usar el userId recibido para guardar la lista
 }
 
 // Guardar con el ID del usuario
@@ -75,9 +58,7 @@ Future<List<WishlistItem>> getWishlistFromLocalStorage() async {
   final prefs = await SharedPreferences.getInstance();
   final wishlistJson = prefs.getString('wishlist');
   if (wishlistJson == null) return [];
-  return (json.decode(wishlistJson) as List)
-      .map((item) => WishlistItem.fromJson(item))
-      .toList();
+  return (json.decode(wishlistJson) as List).map((item) => WishlistItem.fromJson(item)).toList();
 }
 
 List<WishlistItem> wishlist = []; // Definición de la lista

@@ -13,9 +13,7 @@ ThemeData lightTheme = ThemeData(
     titleTextStyle: TextStyle(color: AppColors.blueDark, fontSize: 20),
     iconTheme: IconThemeData(color: AppColors.blueDark),
   ),
-  colorScheme: ColorScheme.fromSeed(
-    seedColor: const Color.fromARGB(255, 15, 58, 109),
-  ),
+  colorScheme: ColorScheme.fromSeed(seedColor: const Color.fromARGB(255, 15, 58, 109)),
 );
 
 ThemeData darkTheme = ThemeData(

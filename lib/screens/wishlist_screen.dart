@@ -28,16 +28,11 @@ class WishlistScreenState extends State<WishlistScreen> {
   @override
   void initState() {
     super.initState();
-    final wishlistProvider = Provider.of<WishlistProvider>(
-      context,
-      listen: false,
-    );
+    final wishlistProvider = Provider.of<WishlistProvider>(context, listen: false);
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     // Cargar la lista localmente
-    wishlistProvider.loadWishlistFromLocalStorage(
-      authProvider.userId!.toString(),
-    );
+    wishlistProvider.loadWishlistFromLocalStorage(authProvider.userId!.toString());
   }
 
   @override
@@ -45,31 +40,19 @@ class WishlistScreenState extends State<WishlistScreen> {
     final wishlistProvider = Provider.of<WishlistProvider>(context);
     return Scaffold(
       backgroundColor: AppColors.blueLight,
-      appBar: AppBar(
-        backgroundColor: AppColors.blueLight,
-        surfaceTintColor: Colors.transparent,
-        title: const Text('Lista de Deseos'),
-      ),
+      appBar: AppBar(backgroundColor: AppColors.blueLight, surfaceTintColor: Colors.transparent, title: const Text('Lista de Deseos')),
       body:
           wishlistProvider.wishlist.isEmpty
               ? Container(
                 decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
                   color: Color.fromARGB(255, 255, 255, 255),
                 ),
-                child: const Center(
-                  child: Text('Tu lista de deseos está vacía'),
-                ),
+                child: const Center(child: Text('Tu lista de deseos está vacía')),
               )
               : Container(
                 decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
                   color: Color.fromARGB(255, 255, 255, 255),
                 ),
                 child: Padding(
@@ -88,23 +71,17 @@ class WishlistScreenState extends State<WishlistScreen> {
                           ),
                           maxLines: 1,
                         ),
-                        subtitle: Text(
-                          '₲. ${numberFormat(item.price.toStringAsFixed(0))}',
-                        ),
+                        subtitle: Text('₲. ${numberFormat(item.price.toStringAsFixed(0))}'),
 
                         // "₲. ${numberFormat(product['price'])}"
                         trailing: IconButton(
                           icon: const Icon(Icons.delete, color: Colors.red),
                           onPressed: () {
-                            final authProvider = Provider.of<AuthProvider>(
-                              context,
-                              listen: false,
-                            );
+                            final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
                             wishlistProvider.removeFromWishlist(
                               item.id,
-                              authProvider.userId!
-                                  .toString(), // Pasar el userId
+                              authProvider.userId!.toString(), // Pasar el userId
                             );
                           },
                         ),

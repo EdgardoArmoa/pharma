@@ -26,10 +26,7 @@ class _BrandBoxState extends State<BrandBox> {
               }
               return Container(
                 width: double.infinity,
-                color:
-                    Theme.of(context).brightness == Brightness.dark
-                        ? AppColors.blueBlak
-                        : Colors.white,
+                color: Theme.of(context).brightness == Brightness.dark ? AppColors.blueBlak : Colors.white,
                 child: CarouselSlider.builder(
                   itemCount: featured.data!.length,
                   options: CarouselOptions(
@@ -48,10 +45,7 @@ class _BrandBoxState extends State<BrandBox> {
                         padding: const EdgeInsets.all(10),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
-                          child: Image.network(
-                            featured.data![i],
-                            fit: BoxFit.cover,
-                          ),
+                          child: Image.network(featured.data![i], fit: BoxFit.cover),
                         ),
                       ),
                     );

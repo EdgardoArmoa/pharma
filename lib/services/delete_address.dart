@@ -8,8 +8,7 @@ Future<bool> eliminarUbicacion(int id) async {
 
   if (response.statusCode == 200) {
     var jsonResponse = jsonDecode(response.body);
-    return jsonResponse["status"] ==
-        "success"; // Retorna `true` si la eliminación fue exitosa
+    return jsonResponse["status"] == "success"; // Retorna `true` si la eliminación fue exitosa
   }
   return false;
 }

@@ -22,7 +22,6 @@ class _CuponProductCardState extends State<CuponProductCard> {
   @override
   Widget build(BuildContext context) {
     int selectedQuantity = 1;
-
     return Container(
       padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
       height: 240.0,
@@ -31,7 +30,7 @@ class _CuponProductCardState extends State<CuponProductCard> {
         builder: (context, featured) {
           if (featured.hasData) {
             if (featured.data!.isEmpty) {
-              return const Center(child: Text("0 Productos Destacados"));
+              return const Center(child: Text("0 Productos con Cupones"));
             }
             return ListView.builder(
               scrollDirection: Axis.horizontal,
@@ -40,16 +39,13 @@ class _CuponProductCardState extends State<CuponProductCard> {
                 final productoConCupon = featured.data![i];
                 final product = productoConCupon.producto;
                 final cupon = productoConCupon.cupon;
+
+                final bool hasValidSalePrice =
+                    product.onSale == 1 && product.priceSale.isNotEmpty && (double.tryParse(product.priceSale) ?? 0) > 0;
+
                 return InkWell(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder:
-                            (context) =>
-                                ProductDetail(data: product, cupon: cupon),
-                      ),
-                    );
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetail(data: product, cupon: cupon)));
                   },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,12 +64,7 @@ class _CuponProductCardState extends State<CuponProductCard> {
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: Color.fromARGB(
-                                (0.1 * 255).toInt(),
-                                60,
-                                60,
-                                60,
-                              ),
+                              color: Color.fromARGB((0.1 * 255).toInt(), 60, 60, 60),
                               spreadRadius: 3, // Extensión de la sombra
                               blurRadius: 4, // Desenfoque
                               offset: Offset(0, 0), // Posición (x, y)
@@ -86,16 +77,11 @@ class _CuponProductCardState extends State<CuponProductCard> {
                               child: Stack(
                                 children: <Widget>[
                                   AspectRatio(
-                                    aspectRatio:
-                                        10 / 10, // Proporción para la imagen
+                                    aspectRatio: 10 / 10, // Proporción para la imagen
                                     child: Padding(
                                       padding: const EdgeInsets.all(10),
                                       child: Container(
-                                        decoration: const BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(20),
-                                          ),
-                                        ),
+                                        decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(20))),
                                         child: ClipRRect(
                                           borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(0),
@@ -106,16 +92,8 @@ class _CuponProductCardState extends State<CuponProductCard> {
                                           child: Image.network(
                                             product.image,
                                             fit: BoxFit.cover,
-                                            errorBuilder: (
-                                              context,
-                                              error,
-                                              stackTrace,
-                                            ) {
-                                              return const Center(
-                                                child: Text(
-                                                  'Error al cargar la imagen',
-                                                ),
-                                              );
+                                            errorBuilder: (context, error, stackTrace) {
+                                              return const Center(child: Text('Error al cargar la imagen'));
                                             },
                                           ),
                                         ),
@@ -124,39 +102,20 @@ class _CuponProductCardState extends State<CuponProductCard> {
                                   ),
 
                                   // if (cupon != null)
-                                  Positioned(
-                                    top: 8,
-                                    left: 0,
-                                    child: SizedBox(
-                                      width: 40,
-                                      child: Image.asset('assets/cupon.png'),
-                                    ),
-                                  ),
+                                  Positioned(top: 8, left: 0, child: SizedBox(width: 40, child: Image.asset('assets/cupon.png'))),
 
-                                  Positioned(
-                                    top: 8.0,
-                                    right: 8.0,
-                                    child: BotonAgregarWishList(
-                                      product: product,
-                                    ),
-                                  ),
+                                  Positioned(top: 8.0, right: 8.0, child: BotonAgregarWishList(product: product)),
 
                                   // PRECIOS REBAJADO
-                                  if (product.onSale == 1)
+                                  if (hasValidSalePrice)
                                     Positioned(
                                       bottom: 50,
                                       child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                          16,
-                                          0,
-                                          0,
-                                          0,
-                                        ),
+                                        padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
                                         child: Text(
                                           '₲${numberFormat(product.price)}',
                                           style: TextStyle(
-                                            decoration:
-                                                TextDecoration.lineThrough,
+                                            decoration: TextDecoration.lineThrough,
                                             color: Theme.of(context).hintColor,
                                             fontSize: 13,
                                           ),
@@ -168,19 +127,11 @@ class _CuponProductCardState extends State<CuponProductCard> {
                                   Positioned(
                                     bottom: 30,
                                     child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                        16,
-                                        0,
-                                        0,
-                                        0,
-                                      ),
+                                      padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
                                       child: Text(
-                                        '₲${numberFormat(product.onSale == 1 ? product.priceSale : product.price)}',
+                                        '₲${numberFormat(hasValidSalePrice ? product.priceSale : product.price)}',
                                         style: TextStyle(
-                                          color:
-                                              product.onSale == 1
-                                                  ? Colors.pink
-                                                  : Colors.black,
+                                          color: hasValidSalePrice ? Colors.pink : Colors.black,
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -192,52 +143,35 @@ class _CuponProductCardState extends State<CuponProductCard> {
                                     right: 0,
                                     child: IconButton(
                                       padding: EdgeInsets.zero,
-                                      icon: const Icon(
-                                        Icons.shopping_cart_outlined,
-                                      ),
+                                      icon: const Icon(Icons.shopping_cart_outlined),
                                       onPressed: () {
-                                        final authProvider =
-                                            Provider.of<AuthProvider>(
-                                              context,
-                                              listen: false,
-                                            );
+                                        final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
                                         if (!authProvider.isAuthenticated) {
                                           // Si el usuario no está logeado, redirigirlo a LoginScreen
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder:
-                                                  (context) =>
-                                                      const LoginScreen(),
-                                            ),
-                                          );
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
                                           return; // Detiene la ejecución
                                         }
+
+                                        final double effectivePrice =
+                                            double.tryParse(hasValidSalePrice ? product.priceSale : product.price) ??
+                                            double.tryParse(product.price) ??
+                                            0.0;
 
                                         final cartItem = CartItem(
                                           id: product.id,
                                           name: product.name,
-                                          price: double.parse(product.price),
+                                          price: effectivePrice,
                                           image: product.image,
                                           quantity: 1,
                                         );
-                                        Provider.of<CartProvider>(
-                                          context,
-                                          listen: false,
-                                        ).addToCart(cartItem, selectedQuantity);
+                                        Provider.of<CartProvider>(context, listen: false).addToCart(cartItem, selectedQuantity);
 
                                         // Mostrar el SnackBar después de agregar el producto
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
+                                        ScaffoldMessenger.of(context).showSnackBar(
                                           SnackBar(
-                                            content: Text(
-                                              "${product.name} añadido al carrito",
-                                            ),
-                                            duration: const Duration(
-                                              seconds: 2,
-                                            ),
+                                            content: Text("${product.name} añadido al carrito"),
+                                            duration: const Duration(seconds: 2),
                                           ),
                                         );
                                       },
@@ -249,14 +183,8 @@ class _CuponProductCardState extends State<CuponProductCard> {
                                     child: SizedBox(
                                       width: 138,
                                       child: Text(
-                                        product.name.toUpperCase() +
-                                            product.name
-                                                .substring(1)
-                                                .toLowerCase(),
-                                        style: GoogleFonts.quicksand(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 13,
-                                        ),
+                                        product.name.toUpperCase() + product.name.substring(1).toLowerCase(),
+                                        style: GoogleFonts.quicksand(fontWeight: FontWeight.w600, fontSize: 13),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),
@@ -268,20 +196,6 @@ class _CuponProductCardState extends State<CuponProductCard> {
                           ],
                         ),
                       ),
-                      // const SizedBox(height: 10),
-                      // SizedBox(
-                      //   width: 138,
-                      //   child: Text(
-                      //     product.name.toUpperCase() +
-                      //         product.name.substring(1).toLowerCase(),
-                      //     style: GoogleFonts.quicksand(
-                      //       fontWeight: FontWeight.w600,
-                      //       fontSize: 13,
-                      //     ),
-                      //     maxLines: 1,
-                      //     overflow: TextOverflow.ellipsis,
-                      //   ),
-                      // ),
                     ],
                   ),
                 );

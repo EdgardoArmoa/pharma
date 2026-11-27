@@ -13,21 +13,14 @@ Future<void> validarYAplicarCupon({
   required double total,
   required double totalOriginal,
 
-  required void Function(Map<String, dynamic> cupon, double totalFinal)
-  onSuccess,
+  required void Function(Map<String, dynamic> cupon, double totalFinal) onSuccess,
   required void Function(String mensajeError) onError,
   required List<CartItem> cartItems,
 }) async {
-  final url = Uri.parse(
-    'https://farma.staweno.com/cupones/validar_cupon_cliente.php',
-  );
+  final url = Uri.parse('https://farma.staweno.com/cupones/validar_cupon_cliente.php');
 
   try {
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'codigo': codigo}),
-    );
+    final response = await http.post(url, headers: {'Content-Type': 'application/json'}, body: jsonEncode({'codigo': codigo}));
 
     final data = jsonDecode(response.body);
 
@@ -36,12 +29,7 @@ Future<void> validarYAplicarCupon({
     if (response.statusCode == 200 && data['valido'] == true) {
       final cupon = data['cupon'];
       final cartProvider = Provider.of<CartProvider>(context, listen: false);
-      final descuento = calcularDescuento(
-        cupon: data['cupon'],
-        total: totalOriginal,
-        cartItems: cartProvider.cartItems,
-        context: context,
-      );
+      final descuento = calcularDescuento(cupon: data['cupon'], total: totalOriginal, cartItems: cartProvider.cartItems, context: context);
       final totalFinal = total - descuento;
 
       onSuccess(cupon, totalFinal); // 👉 callback que actualiza el estado
@@ -75,14 +63,7 @@ double calcularDescuento({
 
     // 👉 Cupón aplicado a productos específicos del carrito
     final cantidadProductosConCupon = cartItems
-        .where(
-          (item) =>
-              Provider.of<CuponProvider>(
-                context,
-                listen: false,
-              ).obtenerCuponDeProducto(item.id)?.id ==
-              cupon['id'],
-        )
+        .where((item) => Provider.of<CuponProvider>(context, listen: false).obtenerCuponDeProducto(item.id)?.id == cupon['id'])
         .fold(0, (sum, item) => sum + item.quantity);
 
     return monto * cantidadProductosConCupon;

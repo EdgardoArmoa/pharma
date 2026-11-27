@@ -16,9 +16,7 @@ class CuponProvider with ChangeNotifier {
     final datos = await fetchProductosConCupon();
 
     _productosConCuponIds = datos.map((e) => e.producto.id).toSet();
-    _cuponesPorProducto = {
-      for (var item in datos) item.producto.id: item.cupon,
-    };
+    _cuponesPorProducto = {for (var item in datos) item.producto.id: item.cupon};
 
     _loaded = true;
     notifyListeners();

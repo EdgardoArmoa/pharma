@@ -18,10 +18,7 @@ class SelectMetodPay extends StatelessWidget {
             builder: (BuildContext context) {
               return Container(
                 decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
                   color: Color.fromARGB(255, 236, 236, 236),
                 ),
                 child: Padding(
@@ -32,19 +29,10 @@ class SelectMetodPay extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            "Método de Pago",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
+                          const Text("Método de Pago", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
                           IconButton(
                             onPressed: () => Navigator.pop(context),
-                            icon: const Icon(
-                              Icons.keyboard_arrow_down_rounded,
-                              size: 28,
-                            ),
+                            icon: const Icon(Icons.keyboard_arrow_down_rounded, size: 28),
                           ),
                         ],
                       ),
@@ -62,47 +50,26 @@ class SelectMetodPay extends StatelessWidget {
         },
         leading: const Icon(Icons.account_balance_wallet, size: 28),
         title: const Text("Método de pago"),
-        subtitle: Text(
-          paymentProvider.selectedMethod,
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-        ),
+        subtitle: Text(paymentProvider.selectedMethod, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
         trailing: const Icon(Icons.arrow_forward_ios_rounded),
       ),
     );
   }
 
   Widget _buildPaymentOption(BuildContext context, String title) {
-    final paymentProvider = Provider.of<PaymentProvider>(
-      context,
-      listen: false,
-    );
+    final paymentProvider = Provider.of<PaymentProvider>(context, listen: false);
 
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 20),
       decoration: BoxDecoration(
-        color:
-            paymentProvider.selectedMethod == title ? Colors.red : Colors.white,
+        color: paymentProvider.selectedMethod == title ? Colors.red : Colors.white,
         borderRadius: BorderRadius.circular(10),
       ),
       child: ListTile(
-        title: Text(
-          title,
-          style: TextStyle(
-            fontSize: 18,
-            color:
-                paymentProvider.selectedMethod == title
-                    ? Colors.white
-                    : Colors.black,
-          ),
-        ),
+        title: Text(title, style: TextStyle(fontSize: 18, color: paymentProvider.selectedMethod == title ? Colors.white : Colors.black)),
         trailing: Icon(
-          paymentProvider.selectedMethod == title
-              ? Icons.check
-              : Icons.arrow_forward_ios_rounded,
-          color:
-              paymentProvider.selectedMethod == title
-                  ? Colors.white
-                  : Colors.black,
+          paymentProvider.selectedMethod == title ? Icons.check : Icons.arrow_forward_ios_rounded,
+          color: paymentProvider.selectedMethod == title ? Colors.white : Colors.black,
         ),
         onTap: () {
           paymentProvider.updateMethod(title); // Actualiza el estado global
@@ -117,10 +84,7 @@ class SelectMetodPay extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-      ),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
       child: ListTile(
         title: const Text("Pos", style: TextStyle(fontSize: 18)),
         trailing: const Icon(Icons.arrow_forward_ios_rounded),
@@ -130,10 +94,7 @@ class SelectMetodPay extends StatelessWidget {
             builder: (BuildContext context) {
               return Container(
                 decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
                   color: Color.fromARGB(255, 236, 236, 236),
                 ),
                 child: Padding(
@@ -143,17 +104,8 @@ class SelectMetodPay extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            "Seleccionar tipo de tarjeta",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () => Navigator.pop(context),
-                            icon: const Icon(Icons.close, size: 28),
-                          ),
+                          const Text("Seleccionar tipo de tarjeta", style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+                          IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close, size: 28)),
                         ],
                       ),
                       const SizedBox(height: 20),
@@ -171,37 +123,19 @@ class SelectMetodPay extends StatelessWidget {
   }
 
   Widget _buildSubOption(BuildContext context, String title) {
-    final paymentProvider = Provider.of<PaymentProvider>(
-      context,
-      listen: false,
-    );
+    final paymentProvider = Provider.of<PaymentProvider>(context, listen: false);
 
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 20),
       decoration: BoxDecoration(
-        color:
-            paymentProvider.selectedMethod == title ? Colors.red : Colors.white,
+        color: paymentProvider.selectedMethod == title ? Colors.red : Colors.white,
         borderRadius: BorderRadius.circular(10),
       ),
       child: ListTile(
-        title: Text(
-          title,
-          style: TextStyle(
-            fontSize: 18,
-            color:
-                paymentProvider.selectedMethod == title
-                    ? Colors.white
-                    : Colors.black,
-          ),
-        ),
+        title: Text(title, style: TextStyle(fontSize: 18, color: paymentProvider.selectedMethod == title ? Colors.white : Colors.black)),
         trailing: Icon(
-          paymentProvider.selectedMethod == title
-              ? Icons.check
-              : Icons.arrow_forward_ios_rounded,
-          color:
-              paymentProvider.selectedMethod == title
-                  ? Colors.white
-                  : Colors.black,
+          paymentProvider.selectedMethod == title ? Icons.check : Icons.arrow_forward_ios_rounded,
+          color: paymentProvider.selectedMethod == title ? Colors.white : Colors.black,
         ),
         onTap: () {
           paymentProvider.updateMethod(title); // Actualiza el estado global
@@ -213,17 +147,11 @@ class SelectMetodPay extends StatelessWidget {
   }
 
   Widget _buildTransferOption(BuildContext context) {
-    final paymentProvider = Provider.of<PaymentProvider>(
-      context,
-      listen: false,
-    );
+    final paymentProvider = Provider.of<PaymentProvider>(context, listen: false);
 
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-      ),
+      decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
       child: ListTile(
         title: const Text("Transferencia", style: TextStyle(fontSize: 18)),
         trailing: const Icon(Icons.arrow_forward_ios_rounded),
@@ -233,10 +161,7 @@ class SelectMetodPay extends StatelessWidget {
             builder: (BuildContext context) {
               return Container(
                 decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
                   color: Color.fromARGB(255, 236, 236, 236),
                 ),
                 child: Padding(
@@ -246,30 +171,16 @@ class SelectMetodPay extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
-                            "Datos para la transferencia",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          IconButton(
-                            onPressed: () => Navigator.pop(context),
-                            icon: const Icon(Icons.close, size: 28),
-                          ),
+                          const Text("Datos para la transferencia", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+                          IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close, size: 28)),
                         ],
                       ),
                       const SizedBox(height: 20),
-                      const Text(
-                        "Datos Bancarios",
-                        style: TextStyle(fontSize: 16),
-                      ),
+                      const Text("Datos Bancarios", style: TextStyle(fontSize: 16)),
                       const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () {
-                          paymentProvider.updateMethod(
-                            "Transferencia",
-                          ); // Actualiza el estado global
+                          paymentProvider.updateMethod("Transferencia"); // Actualiza el estado global
                           Navigator.pop(context); // Cierra la última hoja
                           Navigator.pop(context); // Cierra la hoja principal
                         },

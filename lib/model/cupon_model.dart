@@ -40,17 +40,14 @@ class ProductoConCupon {
   ProductoConCupon({required this.producto, required this.cupon});
 
   factory ProductoConCupon.fromJson(Map<String, dynamic> json) {
-    print('📦 JSON Prdocuto conCupon: ${json['minimo']}'); //
-
     return ProductoConCupon(
       producto: Product.fromJson({
-        'id': int.tryParse(json['id'].toString()) ?? 0,
+        'id': int.tryParse(json['id']?.toString() ?? '0') ?? 0,
         'name': json['name']?.toString() ?? '',
         'image': json['image']?.toString() ?? '',
         'price': json['price']?.toString() ?? '',
-        'priceSale': json['price_sale']?.toString() ?? '',
-        'onSale': int.tryParse(json['on_sale'].toString()) ?? 0,
-        // Podés sumar más campos si el JSON lo incluye más adelante
+        'price_sale': json['price_sale']?.toString() ?? '',
+        'on_sale': int.tryParse(json['on_sale']?.toString() ?? '0') ?? 0,
       }),
       cupon: Cupon.fromJson(json['cupon']),
     );
@@ -80,10 +77,7 @@ class CuponDisponible {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is CuponDisponible &&
-          runtimeType == other.runtimeType &&
-          clienteCuponId == other.clienteCuponId;
+      identical(this, other) || other is CuponDisponible && runtimeType == other.runtimeType && clienteCuponId == other.clienteCuponId;
 
   @override
   int get hashCode => clienteCuponId.hashCode;

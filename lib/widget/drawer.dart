@@ -45,16 +45,12 @@ class _NewDrawerState extends State<NewDrawer> {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
 
-    final authProvider = Provider.of<local_auth_provider.AuthProvider>(
-      context,
-      listen: false,
-    );
+    final authProvider = Provider.of<local_auth_provider.AuthProvider>(context, listen: false);
     final email = authProvider.user?.email ?? 'info@pharma.com';
     final nombre = authProvider.user?.name ?? 'Usuario';
 
     final photoUrl =
-        (authProvider.user?.photo != null &&
-                authProvider.user!.photo.isNotEmpty)
+        (authProvider.user?.photo != null && authProvider.user!.photo.isNotEmpty)
             ? authProvider.user!.photo
             : 'https://cdn-icons-png.flaticon.com/512/64/64572.png';
 
@@ -67,10 +63,7 @@ class _NewDrawerState extends State<NewDrawer> {
               children: <Widget>[
                 DrawerHeader(
                   decoration: BoxDecoration(
-                    color:
-                        Theme.of(context).brightness == Brightness.dark
-                            ? AppColors.blueBlak
-                            : AppColors.blueLight,
+                    color: Theme.of(context).brightness == Brightness.dark ? AppColors.blueBlak : AppColors.blueLight,
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -79,29 +72,20 @@ class _NewDrawerState extends State<NewDrawer> {
                         radius: 40,
                         backgroundImage:
                             // ignore: unnecessary_null_comparison
-                            photoUrl != null
-                                ? NetworkImage(photoUrl)
-                                : AssetImage("assets/google_logo.png")
-                                    as ImageProvider,
+                            photoUrl != null ? NetworkImage(photoUrl) : AssetImage("assets/google_logo.png") as ImageProvider,
                       ),
                       SizedBox(height: 5),
                       Text(
                         nombre,
                         style: TextStyle(
-                          color:
-                              Theme.of(context).brightness == Brightness.dark
-                                  ? AppColors.blueLight
-                                  : AppColors.blueBlak,
+                          color: Theme.of(context).brightness == Brightness.dark ? AppColors.blueLight : AppColors.blueBlak,
                           fontSize: 15,
                         ),
                       ),
                       Text(
                         email,
                         style: TextStyle(
-                          color:
-                              Theme.of(context).brightness == Brightness.dark
-                                  ? AppColors.blueLight
-                                  : AppColors.blueBlak,
+                          color: Theme.of(context).brightness == Brightness.dark ? AppColors.blueLight : AppColors.blueBlak,
                           fontSize: 11,
                         ),
                       ),
@@ -112,25 +96,17 @@ class _NewDrawerState extends State<NewDrawer> {
                   leading: Icon(Icons.home_outlined),
                   title: Text('Home'),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => MyHomePage()),
-                    );
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyHomePage()));
                   },
                 ),
 
                 Visibility(
-                  visible:
-                      (FirebaseAuth.instance.currentUser != null ||
-                          authProvider.isAuthenticated),
+                  visible: (FirebaseAuth.instance.currentUser != null || authProvider.isAuthenticated),
                   child: ListTile(
                     leading: Icon(Icons.account_circle_outlined),
                     title: Text('Mi Cuenta'),
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => MyAcount()),
-                      );
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => MyAcount()));
                     },
                   ),
                 ),
@@ -139,22 +115,14 @@ class _NewDrawerState extends State<NewDrawer> {
                   leading: const Icon(Icons.card_giftcard_rounded),
                   title: const Text('Mis Cupones'),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => CuponesScreen()),
-                    );
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => CuponesScreen()));
                   },
                 ),
                 ListTile(
                   leading: const Icon(Icons.notifications_outlined),
                   title: const Text('Notificaciones'),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const NotificationScreen(),
-                      ),
-                    );
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const NotificationScreen()));
                   },
                   trailing: Consumer<NotificacionesProvider>(
                     builder: (context, provider, child) {
@@ -168,9 +136,7 @@ class _NewDrawerState extends State<NewDrawer> {
                           ),
                           child: Text(
                             '${provider.totalNoLeidas}',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ), // Estilos del texto
+                            style: TextStyle(color: Colors.white), // Estilos del texto
                           ),
                         ),
                       );
@@ -181,64 +147,42 @@ class _NewDrawerState extends State<NewDrawer> {
                   leading: Icon(Icons.favorite_border),
                   title: Text('Mi Favoritos'),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => WishlistScreen()),
-                    );
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => WishlistScreen()));
                   },
                 ),
 
                 ListTile(
                   leading: Icon(
-                    Provider.of<ThemeProvider>(context).themeMode ==
-                            ThemeMode.dark
-                        ? Icons.light_mode
-                        : Icons.dark_mode_outlined,
+                    Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark ? Icons.light_mode : Icons.dark_mode_outlined,
                   ),
-                  title: Text(
-                    Provider.of<ThemeProvider>(context).themeMode ==
-                            ThemeMode.dark
-                        ? "Modo día"
-                        : "Modo noche",
-                  ),
+                  title: Text(Provider.of<ThemeProvider>(context).themeMode == ThemeMode.dark ? "Modo día" : "Modo noche"),
                   trailing: Transform.scale(
                     scale: 0.8,
-                    child: Switch(
-                      value: themeProvider.themeMode == ThemeMode.dark,
-                      onChanged: (value) => themeProvider.toggleTheme(),
-                    ),
+                    child: Switch(value: themeProvider.themeMode == ThemeMode.dark, onChanged: (value) => themeProvider.toggleTheme()),
                   ),
                 ),
                 // INICIAR y CERRAR SESSION
                 ListTile(
                   leading: Icon(
-                    (FirebaseAuth.instance.currentUser != null ||
-                            Provider.of<local_auth_provider.AuthProvider>(
-                              context,
-                            ).isAuthenticated)
+                    (FirebaseAuth.instance.currentUser != null || Provider.of<local_auth_provider.AuthProvider>(context).isAuthenticated)
                         ? Icons.logout
                         : Icons.login,
                   ),
                   title: Text(
-                    (FirebaseAuth.instance.currentUser != null ||
-                            Provider.of<local_auth_provider.AuthProvider>(
-                              context,
-                            ).isAuthenticated)
+                    (FirebaseAuth.instance.currentUser != null || Provider.of<local_auth_provider.AuthProvider>(context).isAuthenticated)
                         ? "Cerrar sesión"
                         : "Iniciar sesión",
                   ),
                   onTap: () async {
                     final authService = AuthService();
                     final prefs = await SharedPreferences.getInstance();
-                    final authProvider =
-                        Provider.of<local_auth_provider.AuthProvider>(
-                          // ignore: use_build_context_synchronously
-                          context,
-                          listen: false,
-                        );
+                    final authProvider = Provider.of<local_auth_provider.AuthProvider>(
+                      // ignore: use_build_context_synchronously
+                      context,
+                      listen: false,
+                    );
 
-                    if (FirebaseAuth.instance.currentUser != null ||
-                        authProvider.isAuthenticated) {
+                    if (FirebaseAuth.instance.currentUser != null || authProvider.isAuthenticated) {
                       // Cierra sesión en Firebase y Google si aplica
                       if (FirebaseAuth.instance.currentUser != null) {
                         // ignore: use_build_context_synchronously
@@ -253,24 +197,14 @@ class _NewDrawerState extends State<NewDrawer> {
                       authProvider.clearUserData();
 
                       // Navegar a LoginScreen
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => const LoginScreen()),
-                      );
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const LoginScreen()));
                     } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginScreen()),
-                      );
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
                     }
                   },
                 ),
 
-                ListTile(
-                  title: Text("Cerrar Applicacion"),
-                  leading: Icon(Icons.close),
-                  onTap: () => exit(0),
-                ),
+                ListTile(title: Text("Cerrar Applicacion"), leading: Icon(Icons.close), onTap: () => exit(0)),
               ],
             ),
           ),
@@ -279,10 +213,7 @@ class _NewDrawerState extends State<NewDrawer> {
             alignment: Alignment.bottomCenter,
             child: Padding(
               padding: const EdgeInsets.only(bottom: 18),
-              child: Text(
-                "Versión $appVersion",
-                style: TextStyle(color: Colors.grey, fontSize: 12),
-              ),
+              child: Text("Versión $appVersion", style: TextStyle(color: Colors.grey, fontSize: 12)),
             ),
           ),
         ],

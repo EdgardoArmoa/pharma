@@ -29,23 +29,14 @@ class RegisterScreenState extends State<RegisterScreen> {
 
       // Llama al método registerUser del AuthProvider
       final authProvider = Provider.of<AuthProvider>(context, listen: false);
-      final result = await authProvider.registerUser(
-        _username,
-        _email,
-        _password,
-      );
+      final result = await authProvider.registerUser(_username, _email, _password);
 
       // Muestra un mensaje al usuario dependiendo del resultado
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(result?['message'] ?? 'Error desconocido')),
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result?['message'] ?? 'Error desconocido')));
 
       // Si el registro fue exitoso, navegar a LoginScreen()
       if (result?['status'] == "success") {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => LoginScreen()),
-        );
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginScreen()));
       }
     }
   }
@@ -54,16 +45,10 @@ class RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.blueLight,
-      appBar: AppBar(
-        title: const Text("Registro de Usuario "),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text("Registro de Usuario "), centerTitle: true),
       body: Container(
         decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
           color: Color.fromARGB(255, 255, 255, 255),
         ),
         child: SingleChildScrollView(
@@ -82,17 +67,10 @@ class RegisterScreenState extends State<RegisterScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(50)),
-                            color: AppColors.blueDark,
-                          ),
+                          decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(50)), color: AppColors.blueDark),
                           child: const Padding(
                             padding: EdgeInsets.all(16),
-                            child: Icon(
-                              Icons.app_registration,
-                              size: 50,
-                              color: Colors.white,
-                            ),
+                            child: Icon(Icons.app_registration, size: 50, color: Colors.white),
                           ),
                         ),
                       ],
@@ -102,9 +80,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                       decoration: InputDecoration(
                         labelText: 'Nombre de Usuario',
                         prefixIcon: const Icon(Icons.person),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16.0),
-                        ),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0)),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -124,9 +100,7 @@ class RegisterScreenState extends State<RegisterScreen> {
                       decoration: InputDecoration(
                         labelText: 'Correo Electrónico',
                         prefixIcon: const Icon(Icons.email),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16.0),
-                        ),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0)),
                       ),
                       keyboardType: TextInputType.emailAddress,
                       validator: (value) {
@@ -147,20 +121,13 @@ class RegisterScreenState extends State<RegisterScreen> {
                       decoration: InputDecoration(
                         labelText: 'Contraseña',
                         prefixIcon: const Icon(Icons.lock),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16.0),
-                        ),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(16.0)),
                         suffixIcon: IconButton(
                           // Widget a la derecha (para el icono del ojo)
-                          icon: Icon(
-                            _obscureText
-                                ? Icons.visibility_outlined
-                                : Icons.visibility_off_outlined,
-                          ),
+                          icon: Icon(_obscureText ? Icons.visibility_outlined : Icons.visibility_off_outlined),
                           onPressed: () {
                             setState(() {
-                              _obscureText =
-                                  !_obscureText; // Cambia el estado de la visibilidad
+                              _obscureText = !_obscureText; // Cambia el estado de la visibilidad
                             });
                           },
                         ),
@@ -184,17 +151,11 @@ class RegisterScreenState extends State<RegisterScreen> {
                       children: [
                         Expanded(
                           child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              elevation: 0,
-                              backgroundColor: AppColors.blueDark,
-                            ),
+                            style: ElevatedButton.styleFrom(elevation: 0, backgroundColor: AppColors.blueDark),
                             onPressed: () => _register(context),
                             child: const Padding(
                               padding: EdgeInsets.all(16),
-                              child: Text(
-                                'Registrarse',
-                                style: TextStyle(color: Colors.white),
-                              ),
+                              child: Text('Registrarse', style: TextStyle(color: Colors.white)),
                             ),
                           ),
                         ),

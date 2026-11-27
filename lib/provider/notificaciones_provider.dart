@@ -18,24 +18,17 @@ class NotificacionesProvider with ChangeNotifier {
     _cargando = true;
     notifyListeners();
 
-    final url = Uri.parse(
-      'https://farma.staweno.com/get_notification.php?usuario_id=$usuarioId',
-    );
+    final url = Uri.parse('https://farma.staweno.com/get_notification.php?usuario_id=$usuarioId');
     final respuesta = await http.get(url);
 
     if (respuesta.statusCode == 200) {
-      print(
-        "📡 Respuesta de la API: ${respuesta.body}",
-      ); // 🔍 Ver JSON de la API
+      print("📡 Respuesta de la API: ${respuesta.body}"); // 🔍 Ver JSON de la API
       final List<dynamic> datos = json.decode(respuesta.body);
-      List<Notificacion> nuevasNotificaciones =
-          datos.map((json) => Notificacion.fromJson(json)).toList();
+      List<Notificacion> nuevasNotificaciones = datos.map((json) => Notificacion.fromJson(json)).toList();
 
       // ⚠️ SOLUCIÓN: En lugar de limpiar, verificamos si ya existe para evitar duplicados
       for (var nuevaNotificacion in nuevasNotificaciones) {
-        bool yaExiste = _notificaciones.any(
-          (n) => n.id == nuevaNotificacion.id,
-        );
+        bool yaExiste = _notificaciones.any((n) => n.id == nuevaNotificacion.id);
         if (!yaExiste) {
           _notificaciones.add(nuevaNotificacion);
         }

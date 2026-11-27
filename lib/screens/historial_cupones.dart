@@ -46,9 +46,7 @@ class HistorialCuponesPageState extends State<HistorialCuponesPage> {
       setState(() {
         cargando = false;
       });
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error al obtener cupones')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error al obtener cupones')));
     }
   }
 
@@ -56,11 +54,7 @@ class HistorialCuponesPageState extends State<HistorialCuponesPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.blueLight,
-      appBar: AppBar(
-        backgroundColor: AppColors.blueLight,
-        surfaceTintColor: Colors.transparent,
-        title: Text('Historial de utilizados'),
-      ),
+      appBar: AppBar(backgroundColor: AppColors.blueLight, surfaceTintColor: Colors.transparent, title: Text('Historial de utilizados')),
       body:
           cargando
               ? Center(child: CircularProgressIndicator())
@@ -69,10 +63,7 @@ class HistorialCuponesPageState extends State<HistorialCuponesPage> {
               : Container(
                 padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
                 decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(20),
-                    topRight: Radius.circular(20),
-                  ),
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
                   color: Color.fromARGB(255, 255, 255, 255),
                 ),
                 child: ListView.builder(
@@ -80,9 +71,7 @@ class HistorialCuponesPageState extends State<HistorialCuponesPage> {
                   itemBuilder: (context, index) {
                     final cupon = cupones[index];
 
-                    final fechaExpiracion = DateTime.parse(
-                      cupon['valido_hasta'],
-                    );
+                    final fechaExpiracion = DateTime.parse(cupon['valido_hasta']);
                     final ahora = DateTime.now();
                     final diferencia = fechaExpiracion.difference(ahora).inDays;
 
@@ -106,22 +95,13 @@ class HistorialCuponesPageState extends State<HistorialCuponesPage> {
                       child: Stack(
                         children: [
                           // Imagen de fondo
-                          Positioned.fill(
-                            child: Image.asset(
-                              'assets/cupon-background2.png',
-                              fit: BoxFit.contain,
-                            ),
-                          ),
+                          Positioned.fill(child: Image.asset('assets/cupon-background2.png', fit: BoxFit.contain)),
                           Positioned(
                             top: 8,
                             left: 120,
                             child: Text(
                               '${cupon['codigo']}',
-                              style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
+                              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
                             ),
                           ),
 
@@ -129,26 +109,14 @@ class HistorialCuponesPageState extends State<HistorialCuponesPage> {
                           Positioned(
                             top: 42,
                             left: 120,
-                            child: Text(
-                              '₲${numeroFormat.format(cupon['monto'])}',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.white,
-                              ),
-                            ),
+                            child: Text('₲${numeroFormat.format(cupon['monto'])}', style: TextStyle(fontSize: 18, color: Colors.white)),
                           ),
 
                           // // Mensaje adicional (por ejemplo, "Fijo en carrito")
                           Positioned(
                             top: 78,
                             left: 120,
-                            child: Text(
-                              traducirTipo(cupon['tipo']),
-                              style: TextStyle(
-                                fontSize: 10,
-                                color: Colors.white70,
-                              ),
-                            ),
+                            child: Text(traducirTipo(cupon['tipo']), style: TextStyle(fontSize: 10, color: Colors.white70)),
                           ),
 
                           // // Fecha de expiración
@@ -161,16 +129,8 @@ class HistorialCuponesPageState extends State<HistorialCuponesPage> {
                                 textAlign: TextAlign.center,
                                 diferencia > 0
                                     ? 'Expira en $diferencia ${diferencia == 1 ? 'día' : 'días'}'
-                                    : (diferencia == 0
-                                        ? 'Expira hoy'
-                                        : 'Cupón vencido'),
-                                style: TextStyle(
-                                  color:
-                                      diferencia <= 0
-                                          ? Colors.yellowAccent
-                                          : Colors.white,
-                                  fontSize: 10,
-                                ),
+                                    : (diferencia == 0 ? 'Expira hoy' : 'Cupón vencido'),
+                                style: TextStyle(color: diferencia <= 0 ? Colors.yellowAccent : Colors.white, fontSize: 10),
                               ),
                             ),
                           ),

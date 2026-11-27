@@ -20,23 +20,16 @@ class AuthService {
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) return null; // Usuario canceló el login
 
-      final GoogleSignInAuthentication googleAuth =
-          await googleUser.authentication;
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(accessToken: googleAuth.accessToken, idToken: googleAuth.idToken);
 
-      final UserCredential userCredential = await _auth.signInWithCredential(
-        credential,
-      );
+      final UserCredential userCredential = await _auth.signInWithCredential(credential);
       final User? firebaseUser = userCredential.user;
 
       if (firebaseUser != null) {
         final prefs = await SharedPreferences.getInstance();
         final emailCodificado = Uri.encodeComponent(firebaseUser.email ?? '');
-        String apiUrl =
-            "https://farma.staweno.com/get_user.php?email=$emailCodificado";
+        String apiUrl = "https://farma.staweno.com/get_user.php?email=$emailCodificado";
         var response = await http.get(Uri.parse(apiUrl));
 
         int userId = 0; // ID por defecto
@@ -67,21 +60,12 @@ class AuthService {
         );
 
         // 🔥 Guardar datos en `AuthProvider`
-        Provider.of<local_auth.AuthProvider>(
-          context,
-          listen: false,
-        ).setUserAuthenticated(user);
+        Provider.of<local_auth.AuthProvider>(context, listen: false).setUserAuthenticated(user);
 
         // 🔥 Guardar datos en `SharedPreferences`
         await prefs.setString(
           'user',
-          json.encode({
-            "id": user.id,
-            "name": user.name,
-            "email": user.email,
-            "photo": user.photo,
-            "token": user.token,
-          }),
+          json.encode({"id": user.id, "name": user.name, "email": user.email, "photo": user.photo, "token": user.token}),
         );
         await prefs.setString('token', user.token);
 
@@ -132,15 +116,8 @@ class AuthService {
     await prefs.remove('token');
 
     // 🔥 Limpiar datos en `AuthProvider`
-    Provider.of<local_auth.AuthProvider>(
-      context,
-      listen: false,
-    ).clearUserData();
+    Provider.of<local_auth.AuthProvider>(context, listen: false).clearUserData();
 
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (_) => const LoginScreen()),
-      (route) => false,
-    );
+    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (_) => const LoginScreen()), (route) => false);
   }
 }

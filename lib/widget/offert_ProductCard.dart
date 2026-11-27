@@ -41,12 +41,7 @@ class _OffertProductCardState extends State<OffertProductCard> {
                 final product = featured.data![i];
                 return InkWell(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ProductDetail(data: product),
-                      ),
-                    );
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => ProductDetail(data: product)));
                   },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -65,12 +60,7 @@ class _OffertProductCardState extends State<OffertProductCard> {
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: Color.fromARGB(
-                                (0.1 * 255).toInt(),
-                                60,
-                                60,
-                                60,
-                              ), // Color  sombra
+                              color: Color.fromARGB((0.1 * 255).toInt(), 60, 60, 60), // Color  sombra
                               spreadRadius: 3, // Extensión de la sombra
                               blurRadius: 4, // Desenfoque
                               offset: Offset(0, 0), // Posición (x, y)
@@ -83,16 +73,11 @@ class _OffertProductCardState extends State<OffertProductCard> {
                               child: Stack(
                                 children: <Widget>[
                                   AspectRatio(
-                                    aspectRatio:
-                                        10 / 10, // Proporción para la imagen
+                                    aspectRatio: 10 / 10, // Proporción para la imagen
                                     child: Padding(
                                       padding: const EdgeInsets.all(10),
                                       child: Container(
-                                        decoration: const BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(20),
-                                          ),
-                                        ),
+                                        decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(20))),
                                         child: ClipRRect(
                                           borderRadius: BorderRadius.only(
                                             topLeft: Radius.circular(0),
@@ -103,16 +88,8 @@ class _OffertProductCardState extends State<OffertProductCard> {
                                           child: Image.network(
                                             product.image,
                                             fit: BoxFit.cover,
-                                            errorBuilder: (
-                                              context,
-                                              error,
-                                              stackTrace,
-                                            ) {
-                                              return const Center(
-                                                child: Text(
-                                                  'Error al cargar la imagen',
-                                                ),
-                                              );
+                                            errorBuilder: (context, error, stackTrace) {
+                                              return const Center(child: Text('Error al cargar la imagen'));
                                             },
                                           ),
                                         ),
@@ -127,16 +104,8 @@ class _OffertProductCardState extends State<OffertProductCard> {
                                     child: Transform.rotate(
                                       angle: -0.80000, // -45° en radianes
                                       child: Container(
-                                        color: const Color.fromARGB(
-                                          230,
-                                          255,
-                                          64,
-                                          128,
-                                        ),
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 40,
-                                          vertical: 5,
-                                        ),
+                                        color: const Color.fromARGB(230, 255, 64, 128),
+                                        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 5),
                                         child: const Text(
                                           'OFERTA',
                                           style: TextStyle(
@@ -150,29 +119,17 @@ class _OffertProductCardState extends State<OffertProductCard> {
                                     ),
                                   ),
 
-                                  Positioned(
-                                    top: 8.0,
-                                    right: 8.0,
-                                    child: BotonAgregarWishList(
-                                      product: product,
-                                    ),
-                                  ),
+                                  Positioned(top: 8.0, right: 8.0, child: BotonAgregarWishList(product: product)),
                                   // PRECIOS REBAJADO
                                   if (product.onSale == 1)
                                     Positioned(
                                       bottom: 50,
                                       child: Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                          16,
-                                          0,
-                                          0,
-                                          0,
-                                        ),
+                                        padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
                                         child: Text(
                                           '₲${numberFormat(product.price)}',
                                           style: TextStyle(
-                                            decoration:
-                                                TextDecoration.lineThrough,
+                                            decoration: TextDecoration.lineThrough,
                                             color: Theme.of(context).hintColor,
                                             fontSize: 13,
                                           ),
@@ -184,19 +141,11 @@ class _OffertProductCardState extends State<OffertProductCard> {
                                   Positioned(
                                     bottom: 30,
                                     child: Padding(
-                                      padding: const EdgeInsets.fromLTRB(
-                                        16,
-                                        0,
-                                        0,
-                                        0,
-                                      ),
+                                      padding: const EdgeInsets.fromLTRB(16, 0, 0, 0),
                                       child: Text(
                                         '₲${numberFormat(product.onSale == 1 ? product.priceSale : product.price)}',
                                         style: TextStyle(
-                                          color:
-                                              product.onSale == 1
-                                                  ? Colors.pink
-                                                  : Colors.black,
+                                          color: product.onSale == 1 ? Colors.pink : Colors.black,
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -209,52 +158,37 @@ class _OffertProductCardState extends State<OffertProductCard> {
                                     right: 0,
                                     child: IconButton(
                                       padding: EdgeInsets.zero,
-                                      icon: const Icon(
-                                        Icons.shopping_cart_outlined,
-                                      ),
+                                      icon: const Icon(Icons.shopping_cart_outlined),
                                       onPressed: () {
-                                        final authProvider =
-                                            Provider.of<AuthProvider>(
-                                              context,
-                                              listen: false,
-                                            );
+                                        final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
                                         if (!authProvider.isAuthenticated) {
                                           // Si el usuario no está logeado, redirigirlo a LoginScreen
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder:
-                                                  (context) =>
-                                                      const LoginScreen(),
-                                            ),
-                                          );
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
                                           return; // Detiene la ejecución
                                         }
+                                        // Agregar el precio al carrito
+                                        final bool isOnSale = product.onSale == 1 && product.priceSale.isNotEmpty;
+
+                                        final double effectivePrice =
+                                            double.tryParse(isOnSale ? product.priceSale : product.price) ??
+                                            double.tryParse(product.price) ??
+                                            0.0;
 
                                         final cartItem = CartItem(
                                           id: product.id,
                                           name: product.name,
-                                          price: double.parse(product.price),
+                                          price: effectivePrice,
                                           image: product.image,
                                           quantity: 1,
                                         );
-                                        Provider.of<CartProvider>(
-                                          context,
-                                          listen: false,
-                                        ).addToCart(cartItem, selectedQuantity);
+                                        Provider.of<CartProvider>(context, listen: false).addToCart(cartItem, selectedQuantity);
 
                                         // Mostrar el SnackBar después de agregar el producto
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
+                                        ScaffoldMessenger.of(context).showSnackBar(
                                           SnackBar(
-                                            content: Text(
-                                              "${product.name} añadido al carrito",
-                                            ),
-                                            duration: const Duration(
-                                              seconds: 2,
-                                            ),
+                                            content: Text("${product.name} añadido al carrito"),
+                                            duration: const Duration(seconds: 2),
                                           ),
                                         );
                                       },
@@ -267,14 +201,8 @@ class _OffertProductCardState extends State<OffertProductCard> {
                                     child: SizedBox(
                                       width: 134,
                                       child: Text(
-                                        product.name.toUpperCase() +
-                                            product.name
-                                                .substring(1)
-                                                .toLowerCase(),
-                                        style: GoogleFonts.quicksand(
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 13,
-                                        ),
+                                        product.name.toUpperCase() + product.name.substring(1).toLowerCase(),
+                                        style: GoogleFonts.quicksand(fontWeight: FontWeight.w600, fontSize: 13),
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
                                       ),

@@ -14,18 +14,13 @@ Future<void> logoutUser(BuildContext context) async {
     await GoogleSignIn().signOut();
 
     // 🔹 Obtener la instancia del AuthProvider para manejar el estado
-    final authProvider = Provider.of<local_auth_provider.AuthProvider>(
-      context,
-      listen: false,
-    );
+    final authProvider = Provider.of<local_auth_provider.AuthProvider>(context, listen: false);
 
     // Limpiar los datos de autenticación del AuthProvider
     authProvider.logout();
 
     // Mostrar un mensaje de confirmación al usuario
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("¡Has cerrado sesión exitosamente!")),
-    );
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("¡Has cerrado sesión exitosamente!")));
 
     // 🔹 Opcional: Redireccionar al usuario a la pantalla inicial o de login
     Navigator.pushAndRemoveUntil(

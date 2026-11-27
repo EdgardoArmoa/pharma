@@ -34,10 +34,7 @@ class SplashScreenState extends State<SplashScreen> {
       }
     });
     Future.microtask(() {
-      Provider.of<CuponProvider>(
-        context,
-        listen: false,
-      ).cargarCuponesPorProducto();
+      Provider.of<CuponProvider>(context, listen: false).cargarCuponesPorProducto();
     });
   }
 
@@ -69,10 +66,7 @@ class SplashScreenState extends State<SplashScreen> {
         return AlertDialog(
           title: Align(
             alignment: Alignment.center,
-            child: Text(
-              "¡Actualización requerida!",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
+            child: Text("¡Actualización requerida!", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           ),
           content: Text("Por favor, actualiza la aplicación para continuar."),
           actions: [
@@ -82,9 +76,7 @@ class SplashScreenState extends State<SplashScreen> {
                 if (await canLaunchUrl(uri)) {
                   await launchUrl(uri);
                 } else {
-                  throw Exception(
-                    "No se pudo abrir el enlace de actualización.",
-                  );
+                  throw Exception("No se pudo abrir el enlace de actualización.");
                 }
               },
               child: Text("Actualizar ahora"),
@@ -105,19 +97,13 @@ class SplashScreenState extends State<SplashScreen> {
       });
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('No hay conexión a internet'),
-            duration: Duration(seconds: 3),
-          ),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('No hay conexión a internet'), duration: Duration(seconds: 3)));
       });
     } else {
       // Procede a verificar la sesión si hay conexión
-      final authProvider = Provider.of<local_auth.AuthProvider>(
-        context,
-        listen: false,
-      );
+      final authProvider = Provider.of<local_auth.AuthProvider>(context, listen: false);
 
       await authProvider.loadUser();
       await authProvider.loadUser();
@@ -136,15 +122,9 @@ class SplashScreenState extends State<SplashScreen> {
       print("isLocalUser: $isLocalUser");
 
       if (isFirebaseUser || isLocalUser) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const MyHomePage()),
-        );
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const MyHomePage()));
       } else {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const LoginScreen()),
-        );
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const LoginScreen()));
       }
     }
   }
@@ -160,11 +140,7 @@ class SplashScreenState extends State<SplashScreen> {
                   onTap: () {
                     _checkConnectivityAndSession();
                   },
-                  child: const Icon(
-                    Icons.wifi_off,
-                    size: 80,
-                    color: Colors.grey,
-                  ),
+                  child: const Icon(Icons.wifi_off, size: 80, color: Colors.grey),
                 ),
       ),
     );

@@ -9,11 +9,7 @@ class MapaScreen extends StatefulWidget {
   final String direccion;
   final Function(Map<String, dynamic>) onUbicacionConfirmada;
 
-  const MapaScreen({
-    required this.direccion,
-    required this.onUbicacionConfirmada,
-    super.key,
-  });
+  const MapaScreen({required this.direccion, required this.onUbicacionConfirmada, super.key});
 
   @override
   MapaScreenState createState() => MapaScreenState();
@@ -34,9 +30,7 @@ class MapaScreenState extends State<MapaScreen> {
 
   Future<void> _obtenerCoordenadas(String direccion) async {
     if (direccion.isEmpty || !direccion.contains(',')) {
-      debugPrint(
-        'Error: La dirección debe incluir ciudad y calle separadas por una coma.',
-      );
+      debugPrint('Error: La dirección debe incluir ciudad y calle separadas por una coma.');
       setState(() {
         latitud = -25.2637;
         longitud = -57.5759;
@@ -46,13 +40,8 @@ class MapaScreenState extends State<MapaScreen> {
 
     try {
       final queryCodificada = Uri.encodeComponent(direccion);
-      final url = Uri.parse(
-        'https://nominatim.openstreetmap.org/search?q=$queryCodificada&format=json&limit=1',
-      );
-      final response = await http.get(
-        url,
-        headers: {'User-Agent': 'farmacia_app/1.0 (armoanet@gmail.com)'},
-      );
+      final url = Uri.parse('https://nominatim.openstreetmap.org/search?q=$queryCodificada&format=json&limit=1');
+      final response = await http.get(url, headers: {'User-Agent': 'farmacia_app/1.0 (armoanet@gmail.com)'});
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body) as List;
@@ -98,21 +87,10 @@ class MapaScreenState extends State<MapaScreen> {
           },
         ),
         children: [
-          TileLayer(
-            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-            userAgentPackageName: 'com.ejemplo.farmacia_app',
-          ),
+          TileLayer(urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png', userAgentPackageName: 'com.ejemplo.farmacia_app'),
           MarkerLayer(
             markers: [
-              Marker(
-                point: LatLng(latitud, longitud),
-                builder:
-                    (ctx) => const Icon(
-                      Icons.location_on,
-                      color: Colors.red,
-                      size: 30,
-                    ),
-              ),
+              Marker(point: LatLng(latitud, longitud), builder: (ctx) => const Icon(Icons.location_on, color: Colors.red, size: 30)),
             ],
           ),
         ],
@@ -131,13 +109,9 @@ class MapaScreenState extends State<MapaScreen> {
             });
             Navigator.pop(context);
           } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text(
-                  'La dirección debe incluir ciudad y calle separadas por una coma.',
-                ),
-              ),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(const SnackBar(content: Text('La dirección debe incluir ciudad y calle separadas por una coma.')));
           }
         },
       ),

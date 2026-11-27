@@ -5,11 +5,7 @@ class FirebaseMessagingService {
 
   Future<void> initialize() async {
     // Solicitar permisos para notificaciones (iOS)
-    NotificationSettings settings = await _messaging.requestPermission(
-      alert: true,
-      badge: true,
-      sound: true,
-    );
+    NotificationSettings settings = await _messaging.requestPermission(alert: true, badge: true, sound: true);
 
     print('Permisos de notificaciones: ${settings.authorizationStatus}');
 

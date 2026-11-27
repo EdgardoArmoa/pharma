@@ -41,11 +41,7 @@ Future<bool> actualizarUsuarioEnMySQL(
 
   print("Datos enviados: ${jsonEncode(userData)}");
 
-  var response = await http.post(
-    Uri.parse(apiUrl),
-    body: jsonEncode(userData),
-    headers: {"Content-Type": "application/json"},
-  );
+  var response = await http.post(Uri.parse(apiUrl), body: jsonEncode(userData), headers: {"Content-Type": "application/json"});
 
   print("Código de respuesta: ${response.statusCode}");
   print("Respuesta API: ${response.body}");

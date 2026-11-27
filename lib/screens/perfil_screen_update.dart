@@ -94,42 +94,27 @@ class ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
     );
 
     if (success) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Perfil actualizado correctamente"),
-          duration: Duration(seconds: 2),
-        ),
-      );
-      // Volver a ProfileScreen y forzar recarga
-      Navigator.pushReplacement(
+      ScaffoldMessenger.of(
         context,
-        MaterialPageRoute(builder: (context) => ProfileScreen()),
-      );
+      ).showSnackBar(SnackBar(content: Text("Perfil actualizado correctamente"), duration: Duration(seconds: 2)));
+      // Volver a ProfileScreen y forzar recarga
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ProfileScreen()));
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Error al actualizar perfil"),
-          duration: Duration(seconds: 2),
-          backgroundColor: Colors.red,
-        ),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Error al actualizar perfil"), duration: Duration(seconds: 2), backgroundColor: Colors.red));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    var outlineInputBorder = OutlineInputBorder(
-      borderRadius: BorderRadius.circular(16.0),
-    );
+    var outlineInputBorder = OutlineInputBorder(borderRadius: BorderRadius.circular(16.0));
     return Scaffold(
       backgroundColor: AppColors.blueLight,
       appBar: AppBar(title: const Text("Actualizar perfil")),
       body: Container(
         decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
           color: Color.fromARGB(255, 255, 255, 255),
         ),
         child: SingleChildScrollView(
@@ -142,11 +127,7 @@ class ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                   const SizedBox(height: 30),
                   TextFormField(
                     controller: _nombreUsuarioController,
-                    decoration: InputDecoration(
-                      labelText: 'Nombre',
-                      prefixIcon: const Icon(Icons.person),
-                      border: outlineInputBorder,
-                    ),
+                    decoration: InputDecoration(labelText: 'Nombre', prefixIcon: const Icon(Icons.person), border: outlineInputBorder),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Por favor, introduce un nombre de usuario';
@@ -158,11 +139,7 @@ class ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                   const SizedBox(height: 30),
                   TextFormField(
                     controller: _apellidoController,
-                    decoration: InputDecoration(
-                      labelText: 'Apellido',
-                      prefixIcon: const Icon(Icons.person),
-                      border: outlineInputBorder,
-                    ),
+                    decoration: InputDecoration(labelText: 'Apellido', prefixIcon: const Icon(Icons.person), border: outlineInputBorder),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Por favor, introduce un nombre de usuario';
@@ -212,10 +189,7 @@ class ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
 
                       if (pickedDate != null) {
                         setState(() {
-                          _dateBirthController.text =
-                              "${pickedDate.toLocal()}".split(
-                                ' ',
-                              )[0]; // Formatear fecha
+                          _dateBirthController.text = "${pickedDate.toLocal()}".split(' ')[0]; // Formatear fecha
                         });
                       }
                     },
@@ -224,11 +198,7 @@ class ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
 
                   TextFormField(
                     controller: _telefonoController,
-                    decoration: InputDecoration(
-                      labelText: 'Telefono',
-                      prefixIcon: const Icon(Icons.person),
-                      border: outlineInputBorder,
-                    ),
+                    decoration: InputDecoration(labelText: 'Telefono', prefixIcon: const Icon(Icons.person), border: outlineInputBorder),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Por favor, introduce un nombre de usuario';
@@ -240,11 +210,7 @@ class ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                   const SizedBox(height: 30),
                   TextFormField(
                     controller: _direccionController,
-                    decoration: InputDecoration(
-                      labelText: 'Dirección',
-                      prefixIcon: const Icon(Icons.person),
-                      border: outlineInputBorder,
-                    ),
+                    decoration: InputDecoration(labelText: 'Dirección', prefixIcon: const Icon(Icons.person), border: outlineInputBorder),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Por favor, introduce un nombre de usuario';
@@ -257,11 +223,7 @@ class ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                   const SizedBox(height: 30),
                   TextFormField(
                     controller: _ciudadController,
-                    decoration: InputDecoration(
-                      labelText: 'Ciudad',
-                      prefixIcon: const Icon(Icons.person),
-                      border: outlineInputBorder,
-                    ),
+                    decoration: InputDecoration(labelText: 'Ciudad', prefixIcon: const Icon(Icons.person), border: outlineInputBorder),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Por favor, introduce un nombre de usuario';
@@ -274,11 +236,7 @@ class ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                   // BARRIO
                   TextFormField(
                     controller: _barrioController,
-                    decoration: InputDecoration(
-                      labelText: 'Barrio',
-                      prefixIcon: const Icon(Icons.map),
-                      border: outlineInputBorder,
-                    ),
+                    decoration: InputDecoration(labelText: 'Barrio', prefixIcon: const Icon(Icons.map), border: outlineInputBorder),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Por favor, introduce un nombre de usuario';
@@ -329,18 +287,13 @@ class ProfileUpdateScreenState extends State<ProfileUpdateScreen> {
                     children: [
                       Expanded(
                         child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.blueDark,
-                          ),
+                          style: ElevatedButton.styleFrom(backgroundColor: AppColors.blueDark),
                           onPressed: () {
                             _actualizarUsuario();
                           },
                           child: const Padding(
                             padding: EdgeInsets.all(16),
-                            child: Text(
-                              'Actualizar datos',
-                              style: TextStyle(color: Colors.white),
-                            ),
+                            child: Text('Actualizar datos', style: TextStyle(color: Colors.white)),
                           ),
                         ),
                       ),

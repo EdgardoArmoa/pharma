@@ -5,8 +5,7 @@ import 'package:pharma/services/category_service.dart';
 import 'package:pharma/widget/category_widget.dart';
 
 class CategorySlider extends StatelessWidget {
-  final Future<List<dynamic>> Function()
-  getCategory; // Función para obtener categorías
+  final Future<List<dynamic>> Function() getCategory; // Función para obtener categorías
 
   const CategorySlider({super.key, required this.getCategory});
 
@@ -31,9 +30,7 @@ class CategorySlider extends StatelessWidget {
                   width: 94.0,
                   child: CategoryCard(
                     imagePath:
-                        cat.images.isNotEmpty
-                            ? cat.images
-                            : 'https://www.piletasyjuguetes.com/wp-content/uploads/2025/05/didactic.png',
+                        cat.images.isNotEmpty ? cat.images : 'https://www.piletasyjuguetes.com/wp-content/uploads/2025/05/didactic.png',
                     label: cat.nombre,
                     onTap: () {
                       // Navigator.push(

@@ -13,22 +13,16 @@ class WishlistProvider with ChangeNotifier {
   Future<void> saveWishlistToLocalStorage(String userId) async {
     final prefs = await SharedPreferences.getInstance();
     final wishlistJson = _wishlist.map((item) => item.toJson()).toList();
-    prefs.setString(
-      'wishlist_$userId',
-      json.encode(wishlistJson),
-    ); // Usar el userId recibido como parámetro
+    prefs.setString('wishlist_$userId', json.encode(wishlistJson)); // Usar el userId recibido como parámetro
   }
 
   Future<void> loadWishlistFromLocalStorage(String userId) async {
     final prefs = await SharedPreferences.getInstance();
-    final wishlistJson = prefs.getString(
-      'wishlist_$userId',
-    ); // Cargar usando el userId
+    final wishlistJson = prefs.getString('wishlist_$userId'); // Cargar usando el userId
 
     if (wishlistJson != null) {
       final List<dynamic> decodedJson = json.decode(wishlistJson);
-      _wishlist =
-          decodedJson.map((item) => WishlistItem.fromJson(item)).toList();
+      _wishlist = decodedJson.map((item) => WishlistItem.fromJson(item)).toList();
     } else {
       _wishlist = []; // Inicializar como vacía si no hay datos para el usuario
     }
@@ -49,10 +43,7 @@ class WishlistProvider with ChangeNotifier {
 
   void addItemToWishlist(WishlistItem item, String userId) async {
     _wishlist.add(item);
-    await WishlistService().saveWishlistToLocalStorage(
-      userId,
-      _wishlist,
-    ); // Guardar la lista actualizada
+    await WishlistService().saveWishlistToLocalStorage(userId, _wishlist); // Guardar la lista actualizada
     notifyListeners();
   }
 

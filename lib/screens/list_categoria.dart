@@ -38,9 +38,7 @@ class _ListCategoriaState extends State<ListCategoria> {
     cargarProductos();
 
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels >=
-              _scrollController.position.maxScrollExtent - 200 &&
-          !_isLoadingMore) {
+      if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 200 && !_isLoadingMore) {
         cargarMasProductos();
       }
     });
@@ -52,10 +50,7 @@ class _ListCategoriaState extends State<ListCategoria> {
     });
 
     try {
-      List<Product> nuevosProductos = await fetchProductsPaginatorCategory(
-        _currentPage + 1,
-        widget.id.toString(),
-      );
+      List<Product> nuevosProductos = await fetchProductsPaginatorCategory(_currentPage + 1, widget.id.toString());
 
       if (nuevosProductos.isNotEmpty) {
         setState(() {
@@ -84,10 +79,7 @@ class _ListCategoriaState extends State<ListCategoria> {
     });
 
     try {
-      _products = await fetchProductsPaginatorCategory(
-        _currentPage,
-        widget.id.toString(),
-      );
+      _products = await fetchProductsPaginatorCategory(_currentPage, widget.id.toString());
     } catch (error) {
       print("Error al cargar los productos: $error");
     } finally {
@@ -102,19 +94,10 @@ class _ListCategoriaState extends State<ListCategoria> {
     int selectedQuantity = 1;
     return Scaffold(
       backgroundColor: AppColors.blueLight,
-      appBar: AppBar(
-        title: Text(
-          widget.nombre,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-      ),
+      appBar: AppBar(title: Text(widget.nombre, maxLines: 1, overflow: TextOverflow.ellipsis)),
       body: Container(
         decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
           color: Color.fromARGB(255, 255, 255, 255),
         ),
         child: Padding(
@@ -123,27 +106,21 @@ class _ListCategoriaState extends State<ListCategoria> {
               _products.isEmpty && !_isLoading
                   ? const Center(child: Text("No hay productos disponibles"))
                   : CustomScrollView(
-                    controller:
-                        _scrollController, // Vincula el controlador al scroll
+                    controller: _scrollController, // Vincula el controlador al scroll
                     slivers: [
                       SliverGrid(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              mainAxisSpacing: 0,
-                              crossAxisSpacing: 0,
-                              childAspectRatio: 0.60,
-                            ),
+                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 0,
+                          crossAxisSpacing: 0,
+                          childAspectRatio: 0.60,
+                        ),
                         delegate: SliverChildBuilderDelegate((context, index) {
                           if (index < _products.length) {
                             final product = _products[index];
 
-                            final cuponProvider = Provider.of<CuponProvider>(
-                              context,
-                            );
-                            final tieneCupon = cuponProvider.productoTieneCupon(
-                              product.id,
-                            );
+                            final cuponProvider = Provider.of<CuponProvider>(context);
+                            final tieneCupon = cuponProvider.productoTieneCupon(product.id);
                             return Padding(
                               padding: const EdgeInsets.all(5),
                               child: InkWell(
@@ -160,10 +137,7 @@ class _ListCategoriaState extends State<ListCategoria> {
                                       ),
                                     ),
                                 child: Container(
-                                  decoration: BoxDecoration(
-                                    color: getSequentialColor(index),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
+                                  decoration: BoxDecoration(color: getSequentialColor(index), borderRadius: BorderRadius.circular(20)),
                                   child: Stack(
                                     children: [
                                       Padding(
@@ -172,15 +146,10 @@ class _ListCategoriaState extends State<ListCategoria> {
                                           // width: double.infinity,
                                           height: 180,
                                           decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.all(
-                                              Radius.circular(14),
-                                            ),
+                                            borderRadius: BorderRadius.all(Radius.circular(14)),
                                             image: DecorationImage(
                                               image: NetworkImage(
-                                                product.image?.isNotEmpty ==
-                                                        true
-                                                    ? product.image
-                                                    : 'https://via.placeholder.com/50',
+                                                product.image?.isNotEmpty == true ? product.image : 'https://via.placeholder.com/50',
                                               ),
                                               fit: BoxFit.cover,
                                             ),
@@ -203,20 +172,12 @@ class _ListCategoriaState extends State<ListCategoria> {
                                                 bottomLeft: Radius.circular(20),
                                                 bottomRight: Radius.circular(0),
                                               ),
-                                              color: const Color.fromARGB(
-                                                166,
-                                                255,
-                                                255,
-                                                255,
-                                              ),
+                                              color: const Color.fromARGB(166, 255, 255, 255),
                                             ),
 
                                             child: Padding(
                                               padding: const EdgeInsets.all(10),
-                                              child: Icon(
-                                                Icons.card_giftcard_rounded,
-                                                color: Colors.deepPurple,
-                                              ),
+                                              child: Icon(Icons.card_giftcard_rounded, color: Colors.deepPurple),
                                             ),
                                           ),
                                         ),
@@ -235,20 +196,10 @@ class _ListCategoriaState extends State<ListCategoria> {
                                               bottomLeft: Radius.circular(0),
                                               bottomRight: Radius.circular(20),
                                             ),
-                                            color: const Color.fromARGB(
-                                              166,
-                                              255,
-                                              255,
-                                              255,
-                                            ),
+                                            color: const Color.fromARGB(166, 255, 255, 255),
                                           ),
 
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(10),
-                                            child: BotonAgregarWishList(
-                                              product: product,
-                                            ),
-                                          ),
+                                          child: Padding(padding: const EdgeInsets.all(10), child: BotonAgregarWishList(product: product)),
                                         ),
                                       ),
 
@@ -265,72 +216,38 @@ class _ListCategoriaState extends State<ListCategoria> {
                                               bottomLeft: Radius.circular(0),
                                               bottomRight: Radius.circular(20),
                                             ),
-                                            color: const Color.fromARGB(
-                                              166,
-                                              255,
-                                              255,
-                                              255,
-                                            ),
+                                            color: const Color.fromARGB(166, 255, 255, 255),
                                           ),
                                           child: InkWell(
                                             onTap: () {
-                                              final authProvider =
-                                                  Provider.of<AuthProvider>(
-                                                    context,
-                                                    listen: false,
-                                                  );
+                                              final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
-                                              if (!authProvider
-                                                  .isAuthenticated) {
+                                              if (!authProvider.isAuthenticated) {
                                                 // Si el usuario no está logeado, redirigirlo a LoginScreen
-                                                Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                    builder:
-                                                        (context) =>
-                                                            const LoginScreen(),
-                                                  ),
-                                                );
+                                                Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
                                                 return; // Detiene la ejecución
                                               }
 
                                               final cartItem = CartItem(
                                                 id: product.id,
                                                 name: product.name,
-                                                price: double.parse(
-                                                  product.price,
-                                                ),
+                                                price: double.parse(product.price),
                                                 image: product.image,
                                                 quantity: 1,
                                               );
-                                              Provider.of<CartProvider>(
-                                                context,
-                                                listen: false,
-                                              ).addToCart(
-                                                cartItem,
-                                                selectedQuantity,
-                                              );
+                                              Provider.of<CartProvider>(context, listen: false).addToCart(cartItem, selectedQuantity);
 
                                               // Mostrar el SnackBar después de agregar el producto
-                                              ScaffoldMessenger.of(
-                                                context,
-                                              ).showSnackBar(
+                                              ScaffoldMessenger.of(context).showSnackBar(
                                                 SnackBar(
-                                                  content: Text(
-                                                    "${product.name} añadido al carrito",
-                                                  ),
-                                                  duration: const Duration(
-                                                    seconds: 2,
-                                                  ),
+                                                  content: Text("${product.name} añadido al carrito"),
+                                                  duration: const Duration(seconds: 2),
                                                 ),
                                               );
                                             },
                                             child: Padding(
                                               padding: const EdgeInsets.all(5),
-                                              child: Icon(
-                                                Icons.shopping_cart_outlined,
-                                                size: 26,
-                                              ),
+                                              child: Icon(Icons.shopping_cart_outlined, size: 26),
                                             ),
                                           ),
                                         ),
@@ -343,11 +260,7 @@ class _ListCategoriaState extends State<ListCategoria> {
                                         width: 160,
                                         child: Text(
                                           product.categoryName,
-                                          style: TextStyle(
-                                            color: AppColors.grayDark,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                          ),
+                                          style: TextStyle(color: AppColors.grayDark, fontSize: 14, fontWeight: FontWeight.bold),
 
                                           overflow: TextOverflow.ellipsis,
                                         ),
@@ -360,8 +273,7 @@ class _ListCategoriaState extends State<ListCategoria> {
                                         width: 150,
                                         height: 42,
                                         child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               product.name,
@@ -386,10 +298,7 @@ class _ListCategoriaState extends State<ListCategoria> {
                                             Text(
                                               "₲${numberFormat(product.price)}",
                                               textAlign: TextAlign.start,
-                                              style: const TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.bold,
-                                              ),
+                                              style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
                                             ),
                                           ],
                                         ),
@@ -409,12 +318,8 @@ class _ListCategoriaState extends State<ListCategoria> {
                         child:
                             _isLoadingMore
                                 ? Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 16,
-                                  ),
-                                  child: Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
+                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  child: Center(child: CircularProgressIndicator()),
                                 )
                                 : const SizedBox.shrink(),
                       ),

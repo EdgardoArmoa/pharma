@@ -30,19 +30,13 @@ class LoginScreenState extends State<LoginScreen> {
       backgroundColor: AppColors.blueLight,
       appBar: AppBar(
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(20.0),
-            bottomRight: Radius.circular(20.0),
-          ),
+          borderRadius: BorderRadius.only(bottomLeft: Radius.circular(20.0), bottomRight: Radius.circular(20.0)),
         ),
         title: const Text('Iniciar sessión'),
       ),
       body: Container(
         decoration: const BoxDecoration(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
-          ),
+          borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
           color: Color.fromARGB(255, 255, 255, 255),
         ),
         child: SingleChildScrollView(
@@ -58,29 +52,20 @@ class LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.all(Radius.circular(50)),
                       color: Color.fromARGB(255, 15, 58, 109),
                     ),
-                    child: const Padding(
-                      padding: EdgeInsets.all(20),
-                      child: Icon(Icons.key, size: 60, color: Colors.white),
-                    ),
+                    child: const Padding(padding: EdgeInsets.all(20), child: Icon(Icons.key, size: 60, color: Colors.white)),
                   ),
                   const SizedBox(height: 40.0),
                   TextFormField(
                     controller: usernameController,
                     decoration: InputDecoration(
                       labelText: "Usuario",
-                      prefixIcon: const Icon(
-                        Icons.person_2_outlined,
-                      ), // Icono a la izquierda
+                      prefixIcon: const Icon(Icons.person_2_outlined), // Icono a la izquierda
                       border: OutlineInputBorder(
                         // Borde para un aspecto más definido
-                        borderRadius: BorderRadius.circular(
-                          10.0,
-                        ), // Bordes redondeados
+                        borderRadius: BorderRadius.circular(10.0), // Bordes redondeados
                       ),
                     ),
-                    keyboardType:
-                        TextInputType
-                            .emailAddress, // Sugiere el teclado de correo
+                    keyboardType: TextInputType.emailAddress, // Sugiere el teclado de correo
                   ),
                   const SizedBox(height: 20.0),
 
@@ -88,72 +73,40 @@ class LoginScreenState extends State<LoginScreen> {
                     controller: passwordController,
                     decoration: InputDecoration(
                       labelText: "Contraseña",
-                      prefixIcon: const Icon(
-                        Icons.lock_outline,
-                      ), // Icono a la izquierda
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
+                      prefixIcon: const Icon(Icons.lock_outline), // Icono a la izquierda
+                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(10.0)),
                       suffixIcon: IconButton(
                         // Widget a la derecha (para el icono del ojo)
-                        icon: Icon(
-                          _obscureText
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined,
-                        ),
+                        icon: Icon(_obscureText ? Icons.visibility_outlined : Icons.visibility_off_outlined),
                         onPressed: () {
                           setState(() {
-                            _obscureText =
-                                !_obscureText; // Cambia el estado de la visibilidad
+                            _obscureText = !_obscureText; // Cambia el estado de la visibilidad
                           });
                         },
                       ),
                     ),
-                    obscureText:
-                        _obscureText, // Controla si el texto está oculto
+                    obscureText: _obscureText, // Controla si el texto está oculto
                   ),
                   const SizedBox(height: 30),
                   Row(
                     children: [
                       Expanded(
                         child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue[900],
-                          ),
+                          style: ElevatedButton.styleFrom(backgroundColor: Colors.blue[900]),
                           onPressed: () async {
-                            final authProvider = Provider.of<AuthProvider>(
-                              context,
-                              listen: false,
-                            );
-                            final result = await authProvider.loginUser(
-                              usernameController.text,
-                              passwordController.text,
-                            );
+                            final authProvider = Provider.of<AuthProvider>(context, listen: false);
+                            final result = await authProvider.loginUser(usernameController.text, passwordController.text);
 
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  result?['message'] ?? 'Error desconocido',
-                                ),
-                              ),
-                            );
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(result?['message'] ?? 'Error desconocido')));
 
                             if (result?['status'] == "success") {
                               // Redirigir a la pantalla principal
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => MyHomePage(),
-                                ),
-                              );
+                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MyHomePage()));
                             }
                           },
                           child: const Padding(
                             padding: EdgeInsets.all(10),
-                            child: Text(
-                              "Iniciar Sesión",
-                              style: TextStyle(color: Colors.white),
-                            ),
+                            child: Text("Iniciar Sesión", style: TextStyle(color: Colors.white)),
                           ),
                         ),
                       ),
@@ -166,18 +119,12 @@ class LoginScreenState extends State<LoginScreen> {
                     children: [
                       Expanded(
                         child: ElevatedButton.icon(
-                          icon: Image.asset(
-                            'assets/google_logo.png',
-                            height: 24,
-                          ), // Agrega el logo de Google
+                          icon: Image.asset('assets/google_logo.png', height: 24), // Agrega el logo de Google
                           label: const Text("Iniciar sesión con Google"),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.white,
                             foregroundColor: Colors.black,
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 12,
-                              horizontal: 20,
-                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
                             shape: RoundedRectangleBorder(
                               side: BorderSide(
                                 color: Colors.grey, // El color del borde
@@ -189,44 +136,28 @@ class LoginScreenState extends State<LoginScreen> {
                           ),
                           // _handleGoogleSignIn,
                           onPressed: () async {
-                            UsuarioModel? user = await AuthService()
-                                .signInWithGoogle(context);
+                            UsuarioModel? user = await AuthService().signInWithGoogle(context);
                             if (user != null) {
                               // 1. Guarda en tbl_users si aún no existe
                               await guardarUsuarioEnMySQL();
 
                               // 2. Consulta get_user.php para obtener y guardar el id real en AuthProvider
                               if (context.mounted) {
-                                final authProvider = Provider.of<AuthProvider>(
-                                  context,
-                                  listen: false,
-                                );
-                                await authProvider.refreshUserIdByEmail(
-                                  user.email,
-                                );
+                                final authProvider = Provider.of<AuthProvider>(context, listen: false);
+                                await authProvider.refreshUserIdByEmail(user.email);
                               }
 
                               if (!context.mounted) return;
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text("Bienvenido, ${user.name}!"),
-                                  duration: const Duration(seconds: 2),
-                                ),
-                              );
-
-                              Navigator.pushReplacement(
+                              ScaffoldMessenger.of(
                                 context,
-                                MaterialPageRoute(
-                                  builder: (context) => const MyHomePage(),
-                                ),
-                              );
+                              ).showSnackBar(SnackBar(content: Text("Bienvenido, ${user.name}!"), duration: const Duration(seconds: 2)));
+
+                              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const MyHomePage()));
                             } else {
                               if (!context.mounted) return;
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text(
-                                    "Error al iniciar sesión. Inténtalo de nuevo.",
-                                  ),
+                                  content: Text("Error al iniciar sesión. Inténtalo de nuevo."),
                                   duration: const Duration(seconds: 2),
                                 ),
                               );
@@ -244,24 +175,13 @@ class LoginScreenState extends State<LoginScreen> {
                     children: [
                       Expanded(
                         child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            elevation: 0,
-                            backgroundColor: AppColors.blueDark,
-                          ),
+                          style: ElevatedButton.styleFrom(elevation: 0, backgroundColor: AppColors.blueDark),
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const RegisterScreen(),
-                              ),
-                            );
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const RegisterScreen()));
                           },
                           child: const Padding(
                             padding: EdgeInsets.all(10),
-                            child: Text(
-                              "Registrate",
-                              style: TextStyle(color: Colors.white),
-                            ),
+                            child: Text("Registrate", style: TextStyle(color: Colors.white)),
                           ),
                         ),
                       ),
@@ -277,16 +197,8 @@ class LoginScreenState extends State<LoginScreen> {
                           thickness: 1, // Grosor de la línea
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10),
-                        child: Text(
-                          "O puedes ↓ ",
-                          style: TextStyle(fontSize: 16),
-                        ),
-                      ),
-                      Expanded(
-                        child: Divider(color: Colors.grey, thickness: 1),
-                      ),
+                      Padding(padding: EdgeInsets.symmetric(horizontal: 10), child: Text("O puedes ↓ ", style: TextStyle(fontSize: 16))),
+                      Expanded(child: Divider(color: Colors.grey, thickness: 1)),
                     ],
                   ),
 
@@ -299,29 +211,16 @@ class LoginScreenState extends State<LoginScreen> {
                             elevation: 0,
                             backgroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
-                              side: BorderSide(
-                                color: Colors.blue[900]!,
-                                width: 2,
-                              ), // Define el color y el ancho del borde
-                              borderRadius: BorderRadius.circular(
-                                20,
-                              ), // Opcional: para bordes redondeados
+                              side: BorderSide(color: Colors.blue[900]!, width: 2), // Define el color y el ancho del borde
+                              borderRadius: BorderRadius.circular(20), // Opcional: para bordes redondeados
                             ),
                           ),
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const MyHomePage(),
-                              ),
-                            );
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const MyHomePage()));
                           },
                           child: Padding(
                             padding: EdgeInsets.all(10),
-                            child: Text(
-                              "Seguir sin logear",
-                              style: TextStyle(color: Colors.blue[900]),
-                            ),
+                            child: Text("Seguir sin logear", style: TextStyle(color: Colors.blue[900])),
                           ),
                         ),
                       ),

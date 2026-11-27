@@ -19,15 +19,11 @@ Future<void> verificarPerfilUsuario(BuildContext context) async {
     if (datosFaltantes.isNotEmpty) {
       print("⚠️ Datos faltantes: ${datosFaltantes.join(", ")}");
 
-      Provider.of<NotificacionesProvider>(
-        context,
-        listen: false,
-      ).agregarNotificacion(
+      Provider.of<NotificacionesProvider>(context, listen: false).agregarNotificacion(
         Notificacion(
           id: DateTime.now().millisecondsSinceEpoch,
           nombre: "Perfil incompleto",
-          mensaje:
-              "Por favor, actualiza tu perfil. Falta completar: ${datosFaltantes.join(", ")}",
+          mensaje: "Por favor, actualiza tu perfil. Falta completar: ${datosFaltantes.join(", ")}",
           fecha: DateTime.now(),
           urgente: true,
           fueLeida: false,

@@ -17,39 +17,25 @@ class BtnWishList extends StatelessWidget {
       builder: (context, wishlistProvider, child) {
         return InkWell(
           onTap: () {
-            final authProvider = Provider.of<AuthProvider>(
-              context,
-              listen: false,
-            );
+            final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
             print('AUTH : ${authProvider.isAuthenticated}');
 
             if (!authProvider.isAuthenticated) {
               // Si el usuario no está logeado, redirigirlo a LoginScreen
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginScreen()),
-              );
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
               return; // Detiene la ejecución
             }
 
-            final alreadyInWishlist = wishlistProvider.wishlist.any(
-              (item) => item.id == product.id.toString(),
-            );
+            final alreadyInWishlist = wishlistProvider.wishlist.any((item) => item.id == product.id.toString());
 
             if (alreadyInWishlist) {
               // Eliminar si ya está en la lista
-              wishlistProvider.removeFromWishlist(
-                product.id.toString(),
-                authProvider.userId!.toString(),
-              );
+              wishlistProvider.removeFromWishlist(product.id.toString(), authProvider.userId!.toString());
 
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('El producto se eliminó de la lista de deseos'),
-                  duration: Duration(seconds: 2),
-                ),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(const SnackBar(content: Text('El producto se eliminó de la lista de deseos'), duration: Duration(seconds: 2)));
             } else {
               // Agregar si no está en la lista
               final cleanedProduct = {
@@ -59,33 +45,20 @@ class BtnWishList extends StatelessWidget {
                     product.image != null && product.image.isNotEmpty
                         ? product.image
                         : 'https://via.placeholder.com/150', // Imagen predeterminada
-                'price':
-                    double.tryParse(product.price?.toString() ?? '0') ?? 0.0,
+                'price': double.tryParse(product.price?.toString() ?? '0') ?? 0.0,
               };
 
               final wishlistItem = WishlistItem.fromJson(cleanedProduct);
 
-              wishlistProvider.addItemToWishlist(
-                wishlistItem,
-                authProvider.userId!.toString(),
-              );
+              wishlistProvider.addItemToWishlist(wishlistItem, authProvider.userId!.toString());
 
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    '${wishlistItem.name} se añadió a la lista de deseos',
-                  ),
-                  duration: const Duration(seconds: 2),
-                ),
+                SnackBar(content: Text('${wishlistItem.name} se añadió a la lista de deseos'), duration: const Duration(seconds: 2)),
               );
             }
           },
           child: Icon(
-            wishlistProvider.wishlist.any(
-                  (item) => item.id == product.id.toString(),
-                )
-                ? Icons.favorite
-                : Icons.favorite_border,
+            wishlistProvider.wishlist.any((item) => item.id == product.id.toString()) ? Icons.favorite : Icons.favorite_border,
             size: 30,
             color: AppColors.blueDark,
           ),

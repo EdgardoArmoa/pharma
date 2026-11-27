@@ -9,9 +9,7 @@ void showPromoBanner(BuildContext context) async {
 
   if (imageUrl != null) {
     // ✅ Precargar la imagen
-    final ImageStream imageStream = NetworkImage(
-      imageUrl,
-    ).resolve(ImageConfiguration());
+    final ImageStream imageStream = NetworkImage(imageUrl).resolve(ImageConfiguration());
     final Completer<void> completer = Completer<void>();
 
     imageStream.addListener(
@@ -20,8 +18,7 @@ void showPromoBanner(BuildContext context) async {
       }),
     );
 
-    await completer
-        .future; // ✅ Esperar a que la imagen se precargue antes de continuar
+    await completer.future; // ✅ Esperar a que la imagen se precargue antes de continuar
 
     // ✅ Mostrar el `showDialog()` solo cuando la imagen está lista
     showDialog(
@@ -35,10 +32,7 @@ void showPromoBanner(BuildContext context) async {
                 height: MediaQuery.of(context).size.height * 0.5,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  image: DecorationImage(
-                    image: NetworkImage(imageUrl),
-                    fit: BoxFit.cover,
-                  ),
+                  image: DecorationImage(image: NetworkImage(imageUrl), fit: BoxFit.cover),
                 ),
               ),
               Positioned(
@@ -54,8 +48,7 @@ void showPromoBanner(BuildContext context) async {
                   child: IconButton(
                     icon: Icon(Icons.close, size: 18),
                     onPressed: () async {
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
+                      SharedPreferences prefs = await SharedPreferences.getInstance();
                       prefs.setBool('bannerShown', true);
                       Navigator.of(context).pop();
                     },
